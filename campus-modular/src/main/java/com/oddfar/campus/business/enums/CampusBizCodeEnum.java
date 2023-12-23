@@ -45,13 +45,6 @@ public enum CampusBizCodeEnum {
     CONTENT_NOT_YOU(12007,"这不是你的信息墙"),
 
     /**
-     * 关系
-     */
-    RELATION_FOLLOW(1,"关注"),
-    RELATION_SPECIAL_FOLLOW(2,"特别关注"),
-    RELATION_BLOCK(-1,"拉黑"),
-
-    /**
      * 用户
      */
     NOT_LOGGED_IN(11001,"请登录后操作"),

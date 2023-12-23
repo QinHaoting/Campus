@@ -36,4 +36,21 @@ public class CampusConstant {
      */
     public static final Integer RESET_PWD_EXPIRATION = 10;
 
+
+    /**
+     * 用户关系-关注
+     */
+    public static final Integer RELATION_FOLLOW = 1; // "关注"
+
+    /**
+     * 用户关系-特别关注
+     */
+    public static final Integer RELATION_SPECIAL_FOLLOW = 2;
+
+    /**
+     * 用户关系-拉黑
+     */
+    public static final Integer RELATION_BLOCK = -1;
+
+
 }

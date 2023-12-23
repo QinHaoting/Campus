@@ -15,17 +15,17 @@ public class UserRelationVo {
     /**
      * 关系记录主键
      */
-    private Long relationID;
+    private Long relationId;
 
     /**
      * 关系发起者ID
      */
-    private Long senderID;
+    private Long senderId;
 
     /**
      * 关系接收者ID
      */
-    private Long receiverID;
+    private Long receiverId;
 
     /**
      * 关系类型

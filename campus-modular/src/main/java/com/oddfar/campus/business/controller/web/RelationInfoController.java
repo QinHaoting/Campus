@@ -43,7 +43,7 @@ public class RelationInfoController {
      * @return 是否取消关注成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PostMapping(value = "/cancelFollow/{receiverID}", name = "关注")
+    @PostMapping(value = "/cancelFollow/{receiverID}", name = "取消关注")
     public R cancelFollow(@PathVariable Long receiverID) {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.cancelFollow(userId, receiverID);
@@ -61,7 +61,7 @@ public class RelationInfoController {
      * @return 是否特别关注成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PutMapping(value = "/specialFollow/{receiverID}", name = "关注")
+    @PutMapping(value = "/specialFollow/{receiverID}", name = "特别关注")
     public R specialFollow(@PathVariable Long receiverID) {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.specialFollow(userId, receiverID);
@@ -74,12 +74,12 @@ public class RelationInfoController {
     }
 
     /**
-     * 取消关注
+     * 取消特别关注
      * @param receiverID 被关注者ID
-     * @return 是否取消关注成功
+     * @return 是否取消特别关注成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PutMapping(value = "/cancelSpecialFollow/{receiverID}", name = "关注")
+    @PutMapping(value = "/cancelSpecialFollow/{receiverID}", name = "取消特别关注")
     public R cancelSpecialFollow(@PathVariable Long receiverID) {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.cancelSpecialFollow(userId, receiverID);
@@ -97,7 +97,7 @@ public class RelationInfoController {
      * @return 是否拉黑成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PostMapping(value = "/block/{receiverID}", name = "关注")
+    @PostMapping(value = "/block/{receiverID}", name = "拉黑")
     public R block(@PathVariable Long receiverID) {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.block(userId, receiverID);
@@ -115,7 +115,7 @@ public class RelationInfoController {
      * @return 是否取消拉黑成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PostMapping(value = "/cancelBlock/{receiverID}", name = "关注")
+    @PostMapping(value = "/cancelBlock/{receiverID}", name = "取下拉黑")
     public R cancelBlock(@PathVariable Long receiverID) {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.cancelFollow(userId, receiverID);

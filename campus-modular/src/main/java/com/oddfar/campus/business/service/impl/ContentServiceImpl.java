@@ -15,15 +15,18 @@ import com.oddfar.campus.business.domain.vo.SendContentVo;
 import com.oddfar.campus.business.enums.CampusBizCodeEnum;
 import com.oddfar.campus.business.mapper.ContentLoveMapper;
 import com.oddfar.campus.business.mapper.ContentMapper;
+import com.oddfar.campus.business.mapper.UserRelationMapper;
 import com.oddfar.campus.business.service.CampusFileService;
 import com.oddfar.campus.business.service.CategoryService;
 import com.oddfar.campus.business.service.ContentService;
 import com.oddfar.campus.business.service.TagService;
 import com.oddfar.campus.common.core.page.PageUtils;
 import com.oddfar.campus.common.domain.PageResult;
+import com.oddfar.campus.common.domain.entity.SysUserEntity;
 import com.oddfar.campus.common.exception.ServiceException;
 import com.oddfar.campus.common.utils.SecurityUtils;
 import com.oddfar.campus.framework.api.sysconfig.ConfigExpander;
+import com.oddfar.campus.framework.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,13 +53,55 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     private CampusFileService fileService;
     @Resource
     private TagService tagService;
+    @Resource
+    private UserRelationMapper userRelationMapper;
+    @Resource
+    private SysUserMapper userMapper;
 
     @Override
     public PageResult<ContentVo> page(ContentEntity contentEntity) {
         //设置分类等其他参数
         setQueryContentEntity(contentEntity);
 
-        List<ContentVo> contentVos = contentMapper.selectContentList(contentEntity);
+        List<ContentVo> contentVoList = contentMapper.selectContentList(contentEntity);
+
+        List<ContentVo> contentVos = new ArrayList<>();
+
+        Long userId = SecurityUtils.getUserId();
+        List<Long> blockList = userRelationMapper.getBlockList(userId);
+        List<Long> followList = userRelationMapper.getFollowList(userId);
+
+        for (ContentVo contentVo: contentVoList) {
+            Long tempUserId = contentVo.getUserId();
+            Integer readLevel = userMapper.selectUserById(tempUserId).getReadLevel();
+            if (readLevel == 0) { // 非被拉黑可见
+                boolean flag = false;
+                for (Long id: blockList) {
+                    if (contentVo.getUserId().equals(id)) { // 被拉黑者发布的文章
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                    contentVos.add(contentVo);
+            }
+            else if (readLevel == 1) { // 关注可见
+                boolean flag = false;
+                for (Long id: followList) {
+                    if (contentVo.getUserId().equals(id) || contentVo.getUserId().equals(userId)) { // 关注者发布的文章
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag)
+                    contentVos.add(contentVo);
+            }
+        }
+
+        for (ContentVo contentVo: contentVos) {
+            System.out.println(contentVo);
+        }
+
         setAnonymous(contentVos);
         //获取文件url列表
         setFileListByContentVos(contentVos);

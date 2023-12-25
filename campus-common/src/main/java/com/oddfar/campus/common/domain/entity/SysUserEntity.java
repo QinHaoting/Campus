@@ -75,6 +75,17 @@ public class SysUserEntity extends BaseEntity  {
     /** 备注 */
     private String remark;
 
+    /** 个人介绍 */
+    private String introduction;
+
+    /** 个人经历 */
+    private String experience;
+
+    /**
+     * 文章可见等级
+     */
+    private Integer readLevel;
+
     /** 角色对象 */
     @TableField(exist = false)
     private List<SysRoleEntity> roles;

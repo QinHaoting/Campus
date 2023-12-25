@@ -12,11 +12,13 @@ import com.oddfar.campus.common.core.LambdaQueryWrapperX;
 import com.oddfar.campus.common.core.page.PageUtils;
 import com.oddfar.campus.common.domain.PageResult;
 import com.oddfar.campus.common.domain.entity.SysUserEntity;
+import com.oddfar.campus.common.utils.DateUtils;
 import com.oddfar.campus.framework.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,10 +51,33 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
                 .eq(UserRelationEntity::getReceiverId, receiverId));
         if (userRelationEntity == null) { // 未存在关系
             userRelationEntity = new UserRelationEntity(senderId, receiverId, CampusConstant.RELATION_FOLLOW);
+            userRelationEntity.setCreateTime(DateUtils.getNowDate());
             return userRelationMapper.insert(userRelationEntity);
         }
-        else
+        else { // 已关注
+            userRelationEntity.setType(CampusConstant.RELATION_FOLLOW);
+            userRelationEntity.setCreateTime(DateUtils.getNowDate());
+            return userRelationMapper.updateById(userRelationEntity);
+        }
+    }
+
+    /**
+     * 取消关注
+     * @param senderId 关注者ID
+     * @param receiverId 被关注者ID
+     * @return
+     */
+    @Override
+    public int cancelFollow(Long senderId, Long receiverId) {
+        UserRelationEntity userRelationEntity = userRelationMapper.selectOne(new LambdaQueryWrapperX<UserRelationEntity>()
+                .eq(UserRelationEntity::getSenderId, senderId)
+                .eq(UserRelationEntity::getReceiverId, receiverId));
+        if (userRelationEntity == null) { // 未存在关系
             return -1;
+        }
+        else {
+            return userRelationMapper.deleteById(userRelationEntity);
+        }
     }
 
     /**
@@ -67,10 +92,30 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
                 .eq(UserRelationEntity::getSenderId, senderId)
                 .eq(UserRelationEntity::getReceiverId, receiverId));
         if (userRelationEntity == null) { // 不存在该关系
-            return -1;
+            return -1; // 先关注才能特别关注
         }
         userRelationEntity.setType(CampusConstant.RELATION_SPECIAL_FOLLOW);
         return userRelationMapper.updateById(userRelationEntity);
+    }
+
+    /**
+     * 取消特别关注
+     * @param senderId 关注者ID
+     * @param receiverId 被关注者ID
+     * @return
+     */
+    @Override
+    public int cancelSpecialFollow(Long senderId, Long receiverId) {
+        UserRelationEntity userRelationEntity = userRelationMapper.selectOne(new LambdaQueryWrapperX<UserRelationEntity>()
+                .eq(UserRelationEntity::getSenderId, senderId)
+                .eq(UserRelationEntity::getReceiverId, receiverId));
+        if (userRelationEntity == null) { // 未存在关系
+            return -1;
+        }
+        else {
+            userRelationEntity.setType(CampusConstant.RELATION_FOLLOW); // 取消特别关注 = 关注
+            return userRelationMapper.updateById(userRelationEntity);
+        }
     }
 
     @Override
@@ -80,11 +125,32 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
                 .eq(UserRelationEntity::getReceiverId, receiverId));
         if (userRelationEntity == null) { // 未存在关系
             userRelationEntity = new UserRelationEntity(senderId, receiverId, CampusConstant.RELATION_BLOCK);
+            userRelationEntity.setCreateTime(DateUtils.getNowDate());
             return userRelationMapper.insert(userRelationEntity);
         }
         else {
             userRelationEntity.setType(CampusConstant.RELATION_BLOCK);
+            userRelationEntity.setCreateTime(DateUtils.getNowDate());
             return userRelationMapper.updateById(userRelationEntity);
+        }
+    }
+
+    /**
+     * 取消拉黑
+     * @param senderId 关注者ID
+     * @param receiverId 被关注者ID
+     * @return
+     */
+    @Override
+    public int cancelBlock(Long senderId, Long receiverId) {
+        UserRelationEntity userRelationEntity = userRelationMapper.selectOne(new LambdaQueryWrapperX<UserRelationEntity>()
+                .eq(UserRelationEntity::getSenderId, senderId)
+                .eq(UserRelationEntity::getReceiverId, receiverId));
+        if (userRelationEntity == null) { // 未存在关系
+            return -1;
+        }
+        else {
+            return userRelationMapper.deleteById(userRelationEntity);
         }
     }
 

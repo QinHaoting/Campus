@@ -24,6 +24,14 @@ public interface UserRelationService extends IService<UserRelationEntity> {
     int follow(Long senderId, Long receiverId);
 
     /**
+     * 取消关注
+     * @param senderId 关注者ID
+     * @param receiverId 被关注者ID
+     * @return 是否成功取消关注
+     */
+    int cancelFollow(Long senderId, Long receiverId);
+
+    /**
      * 关注
      * @param senderId 关注者ID
      * @param receiverId 被特别关注者ID
@@ -32,13 +40,28 @@ public interface UserRelationService extends IService<UserRelationEntity> {
     int specialFollow(Long senderId, Long receiverId);
 
     /**
+     * 取消特别关注
+     * @param senderId 关注者ID
+     * @param receiverId 被关注者ID
+     * @return 是否成功取消特别关注
+     */
+    int cancelSpecialFollow(Long senderId, Long receiverId);
+
+    /**
      * 关注
      * @param senderId 拉黑者ID
-     * @param receiverId 拉黑者ID
+     * @param receiverId 被拉黑者ID
      * @return 是否成功特别关注
      */
     int block(Long senderId, Long receiverId);
 
+    /**
+     * 取消拉黑
+     * @param senderId 拉黑者ID
+     * @param receiverId 被拉黑者ID
+     * @return 是否成功取消拉黑
+     */
+    int cancelBlock(Long senderId, Long receiverId);
     /**
      * 获取关注列表
      * @param userId 用户ID

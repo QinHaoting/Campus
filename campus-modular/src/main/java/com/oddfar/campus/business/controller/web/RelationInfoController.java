@@ -115,7 +115,7 @@ public class RelationInfoController {
      * @return 是否取消拉黑成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PostMapping(value = "/cancelBlock/{receiverID}", name = "取下拉黑")
+    @PostMapping(value = "/cancelBlock/{receiverID}", name = "取消拉黑")
     public R cancelBlock(@PathVariable Long receiverID) {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.cancelFollow(userId, receiverID);

@@ -174,7 +174,7 @@ public class ContentInfoController {
      * 修改信息墙
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @PutMapping(value = "/modifyContent", name = "修改信息墙")
+    @PutMapping(value = "/updateContent", name = "修改信息墙")
     public R updateContent(@Validated @RequestBody ContentEntity content) {
         return R.ok(contentService.updateContent(content));
     }

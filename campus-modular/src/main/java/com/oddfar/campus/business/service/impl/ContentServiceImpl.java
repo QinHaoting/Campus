@@ -27,6 +27,7 @@ import com.oddfar.campus.common.core.page.PageUtils;
 import com.oddfar.campus.common.domain.PageResult;
 import com.oddfar.campus.common.domain.entity.SysUserEntity;
 import com.oddfar.campus.common.exception.ServiceException;
+import com.oddfar.campus.common.utils.DateUtils;
 import com.oddfar.campus.common.utils.SecurityUtils;
 import com.oddfar.campus.framework.api.sysconfig.ConfigExpander;
 import com.oddfar.campus.framework.mapper.SysUserMapper;
@@ -249,7 +250,8 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public int updateContent(ContentEntity content) {
-
+        content.setUpdateUser(SecurityUtils.getUserId());
+        content.setUpdateTime(DateUtils.getNowDate());
         return contentMapper.updateById(content);
     }
 

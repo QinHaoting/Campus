@@ -1,6 +1,7 @@
 package com.oddfar.campus.business.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.oddfar.campus.business.domain.entity.ContentEntity;
 import com.oddfar.campus.business.domain.entity.ContentTagEntity;
 import lombok.Data;
 
@@ -91,5 +92,21 @@ public class ContentVo {
             params = new HashMap<>();
         }
         return params;
+    }
+
+    public ContentVo() {}
+
+    public ContentVo(ContentEntity contentEntity) {
+        this.setContentId(contentEntity.getContentId());
+        this.setUserId(contentEntity.getUserId());
+        this.setCategoryId(contentEntity.getCategoryId());
+        this.setStatus(contentEntity.getStatus());
+        this.setType(contentEntity.getType());
+        this.setFileCount(contentEntity.getFileCount());
+        this.setLoveCount(contentEntity.getLoveCount());
+        this.setIsAnonymous(contentEntity.getIsAnonymous());
+        this.setReadLevel(contentEntity.getReadLevel());
+        this.setRemark(contentEntity.getRemark());
+        this.setFileUrl(contentEntity.getFileUrl());
     }
 }

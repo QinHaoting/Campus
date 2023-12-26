@@ -3,6 +3,7 @@ package com.oddfar.campus.business.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.oddfar.campus.business.domain.vo.ContentVo;
 import com.oddfar.campus.common.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -86,4 +87,20 @@ public class ContentEntity extends BaseEntity {
      */
     @TableField(exist = false)
     List<String> fileUrl;
+
+    public ContentEntity() {}
+
+    public ContentEntity(ContentVo contentVo) {
+        this.setContentId(contentVo.getContentId());
+        this.setUserId(contentVo.getUserId());
+        this.setCategoryId(contentVo.getCategoryId());
+        this.setStatus(contentVo.getStatus());
+        this.setType(contentVo.getType());
+        this.setFileCount(contentVo.getFileCount());
+        this.setLoveCount(contentVo.getLoveCount());
+        this.setIsAnonymous(contentVo.getIsAnonymous());
+        this.setReadLevel(contentVo.getReadLevel());
+        this.setRemark(contentVo.getRemark());
+        this.setFileUrl(contentVo.getFileUrl());
+    }
 }

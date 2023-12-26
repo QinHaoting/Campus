@@ -89,6 +89,19 @@ public class ContentInfoController {
     }
 
     /**
+     * 条件查询信息墙
+     */
+    @Anonymous
+    @PostMapping(value = "/getContentByCondition", name = "条件查询信息墙")
+    public R getContentByCondition(@RequestBody ContentVo contentVo) {
+        PageResult<ContentVo> page = contentService.getContentByCondition(contentVo);
+        if (page != null)
+            return R.ok().setData(page);
+        else
+            return R.error("无此帖子");
+    }
+
+    /**
      * 根据contentId查询信息墙详细内容
      */
     @Anonymous
@@ -155,6 +168,15 @@ public class ContentInfoController {
     public R toContent(@Validated @RequestBody SendContentVo sendContentVo) {
 
         return R.ok(contentService.sendContent(sendContentVo));
+    }
+
+    /**
+     * 修改信息墙
+     */
+    @PreAuthorize("@ss.resourceAuth()")
+    @PutMapping(value = "/modifyContent", name = "修改信息墙")
+    public R updateContent(@Validated @RequestBody ContentEntity content) {
+        return R.ok(contentService.updateContent(content));
     }
 
     /**

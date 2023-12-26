@@ -46,4 +46,9 @@ public class SendContentVo {
      * 文件id信息
      */
     private List<Long> fileList;
+
+    /**
+     * 文章可读等级
+     */
+    private Integer readLevel;
 }

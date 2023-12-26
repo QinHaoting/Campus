@@ -70,73 +70,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
         List<ContentVo> contentVoList = contentMapper.selectContentList(contentEntity);
 
-//        List<ContentVo> contentVos = new ArrayList<>();
-//
-//        Long currentUserId = SecurityUtils.getUserId();
-//        List<Long> blockList = userRelationMapper.getBlockList(userId);
-//        List<Long> followList = userRelationMapper.getFollowList(userId);
-//
-//        for (ContentVo contentVo: contentVoList) {
-//            Long tempUserId = contentVo.getUserId();
-//            Integer readLevel = userMapper.selectUserById(tempUserId).getReadLevel();
-//            if (readLevel == 0) { // 非被拉黑可见
-//                boolean flag = false;
-//                for (Long id: blockList) {
-//                    if (contentVo.getUserId().equals(id)) { // 被拉黑者发布的文章
-//                        flag = true;
-//                        break;
-//                    }
-//                }
-//                if (!flag)
-//                    contentVos.add(contentVo);
-//            }
-//            else if (readLevel == 1) { // 关注可见
-//                boolean flag = false;
-//                for (Long id: followList) {
-//                    if (contentVo.getUserId().equals(id) || contentVo.getUserId().equals(userId)) { // 关注者发布的文章
-//                        flag = true;
-//                        break;
-//                    }
-//                }
-//                if (flag)
-//                    contentVos.add(contentVo);
-//            }
-//        }
-
-//        for (ContentVo contentVo: contentVoList) {
-//            if (contentVo.getUserId().equals(currentUserId)) { // 自己的文章可以读
-//                contentVos.add(contentVo);
-//                continue;
-//            }
-//
-//            Integer readLevel = contentVo.getReadLevel(); // 文章可读等级
-//            Long contentAuthorID = contentVo.getUserId(); // 文章作者ID
-//
-//            LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX = new LambdaQueryWrapperX<>();
-//            lambdaQueryWrapperX.eq(UserRelationEntity::getSenderId, contentAuthorID);
-//            lambdaQueryWrapperX.eq(UserRelationEntity::getReceiverId, currentUserId); // 当前登录者
-//            UserRelationEntity userRelation = userRelationMapper.selectOne(lambdaQueryWrapperX); // 文章发表者与当前登录者关系
-//            if (userRelation != null) { // 文章发表者与当前登录者有关系
-//                Integer relationType = userRelation.getType();
-//                if (relationType.equals(CampusConstant.RELATION_BLOCK)) { // 当前登录者为被拉黑关系，不可看
-//                    continue;
-//                }
-//                // 至少是关注关系
-//                else {
-//                    contentVos.add(contentVo);
-//                }
-//            }
-//            else { // 文章发表者与当前登录者没有关系
-//                if (readLevel.equals(CampusConstant.CONTENT_READ_FOLLOW)) { // 文章仅关注可读，两者没有关注关系，不可看
-//                    continue;
-//                }
-//                else { // 文章为非拉黑可读，可看
-//                    contentVos.add(contentVo);
-//                }
-//            }
-//        }
-
-        List<ContentVo> contentVos = contentFilter(contentVoList);
+        List<ContentVo> contentVos = contentFilter(contentVoList); // 过滤后的可读文章
 
         setAnonymous(contentVos);
         //获取文件url列表
@@ -161,7 +95,6 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         }
         return contentVos;
     }
-
 
     /**
      * 当前登录者是否可读该文章
@@ -189,6 +122,42 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
             // 文章为非拉黑可读，可读
         }
         return true;
+    }
+
+    /**
+     * 条件查询帖子
+     * @param contentVo 查询条件
+     * @return 符合条件的帖子
+     */
+    @Override
+    public PageResult<ContentVo> getContentByCondition(ContentVo contentVo) {
+        //开始分页
+        PageUtils.startPage(WEB_PAGE_SIZE);
+        LambdaQueryWrapperX<ContentEntity> lambdaQueryWrapperX = new LambdaQueryWrapperX<>();
+        lambdaQueryWrapperX.eq(contentVo.getContentId()!=null && contentVo.getContentId()!=0, ContentEntity::getContentId, contentVo.getContentId());
+        lambdaQueryWrapperX.eq(contentVo.getUserId()!=null && contentVo.getUserId()!=0, ContentEntity::getUserId, contentVo.getUserId());
+        lambdaQueryWrapperX.like(contentVo.getContent()!=null && !contentVo.getContent().equals(""), ContentEntity::getContent, contentVo.getContent());
+        lambdaQueryWrapperX.eq(contentVo.getStatus()!=null, ContentEntity::getStatus, contentVo.getStatus());
+        lambdaQueryWrapperX.eq(contentVo.getType()!=null, ContentEntity::getType, contentVo.getType());
+        lambdaQueryWrapperX.eq(contentVo.getIsAnonymous()!=null, ContentEntity::getIsAnonymous, contentVo.getIsAnonymous());
+        lambdaQueryWrapperX.eq(contentVo.getReadLevel()!=null, ContentEntity::getReadLevel, contentVo.getReadLevel());
+
+        List<ContentEntity> contentEntities = contentMapper.selectList(lambdaQueryWrapperX);
+        if (contentEntities.size() == 0) { // 无符合条件的帖子
+            return null;
+        }
+        // 有帖子
+        List<Long> contentIds = new ArrayList<>();
+        for (ContentEntity content: contentEntities) {
+            if (checkContentCanRead(new ContentVo(content)))
+                contentIds.add(content.getContentId());
+        }
+
+        //获取数量
+        long total = new PageInfo(contentIds).getTotal();
+        List<ContentVo> contentVos = contentMapper.selectContentByIds(contentIds);
+
+        return new PageResult<>(contentVos, total);
     }
 
     @Override
@@ -267,6 +236,10 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
         contentEntity.setContentId(IdWorker.getId());
         contentEntity.setStatus(0);
+
+        if (contentEntity.getReadLevel() == null)
+            contentEntity.setReadLevel(0); // 默认非拉黑可读
+
         int insert = contentMapper.insert(contentEntity);
         //更新文件数据库
         fileService.updateContentFile(sendContentVo.getFileList(), contentEntity.getContentId());

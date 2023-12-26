@@ -29,6 +29,12 @@ public interface ContentService extends IService<ContentEntity> {
      */
     PageResult<ContentVo> hotPage();
 
+    /**
+     * 条件查询文章
+     * @param contentVo 文章查询条件
+     * @return 查询到的文章
+     */
+    PageResult<ContentVo> getContentByCondition(ContentVo contentVo);
 
     /**
      * 查询某用户的点赞墙列表

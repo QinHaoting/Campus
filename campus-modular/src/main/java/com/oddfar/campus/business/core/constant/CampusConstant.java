@@ -52,5 +52,12 @@ public class CampusConstant {
      */
     public static final Integer RELATION_BLOCK = -1;
 
-
+    /**
+     * 文章-全部可读
+     */
+    public static final Integer CONTENT_READ_ALL = 0;
+    /**
+     * 文章-关注可读
+     */
+    public static final Integer CONTENT_READ_FOLLOW = 1;
 }

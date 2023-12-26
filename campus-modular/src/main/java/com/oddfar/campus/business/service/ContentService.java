@@ -104,4 +104,11 @@ public interface ContentService extends IService<ContentEntity> {
      * @return
      */
     boolean checkOwnContent(Long contentId);
+
+    /**
+     * 检查当前登录者是否可读该文章
+     * @param contentVo 文章
+     * @return 是否可读
+     */
+    boolean checkContentCanRead(ContentVo contentVo);
 }

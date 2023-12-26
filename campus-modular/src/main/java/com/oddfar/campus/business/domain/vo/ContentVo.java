@@ -59,6 +59,11 @@ public class ContentVo {
     private Integer isAnonymous;
 
     /**
+     * 可读等级
+     */
+    private Integer readLevel;
+
+    /**
      * 文件URL列表
      */
     private List<String> fileUrl;

@@ -77,6 +77,11 @@ public class ContentEntity extends BaseEntity {
     private String remark;
 
     /**
+     * 可读等级
+     */
+    private Integer readLevel;
+
+    /**
      * 文件URL列表
      */
     @TableField(exist = false)

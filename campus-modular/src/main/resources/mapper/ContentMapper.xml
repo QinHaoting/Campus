@@ -33,6 +33,7 @@
         <result property="fileCount" column="file_count" jdbcType="TINYINT"/>
         <result property="loveCount" column="love_count" jdbcType="BIGINT"/>
         <result property="isAnonymous" column="is_anonymous" jdbcType="TINYINT"/>
+        <result property="readLevel" column="read_level" jdbcType="TINYINT"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <association property="params" javaType="java.util.Map" >
@@ -73,6 +74,7 @@
                c.file_count,
                c.love_count,
                c.is_anonymous,
+               c.read_level,
                c.remark,
                c.del_flag,
                c.create_time,

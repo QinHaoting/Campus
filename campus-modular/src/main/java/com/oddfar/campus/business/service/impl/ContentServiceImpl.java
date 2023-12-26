@@ -5,10 +5,12 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageInfo;
+import com.oddfar.campus.business.core.constant.CampusConstant;
 import com.oddfar.campus.business.core.expander.CampusConfigExpander;
 import com.oddfar.campus.business.domain.entity.CategoryEntity;
 import com.oddfar.campus.business.domain.entity.ContentEntity;
 import com.oddfar.campus.business.domain.entity.ContentTagEntity;
+import com.oddfar.campus.business.domain.entity.UserRelationEntity;
 import com.oddfar.campus.business.domain.vo.CampusFileVo;
 import com.oddfar.campus.business.domain.vo.ContentVo;
 import com.oddfar.campus.business.domain.vo.SendContentVo;
@@ -20,6 +22,7 @@ import com.oddfar.campus.business.service.CampusFileService;
 import com.oddfar.campus.business.service.CategoryService;
 import com.oddfar.campus.business.service.ContentService;
 import com.oddfar.campus.business.service.TagService;
+import com.oddfar.campus.common.core.LambdaQueryWrapperX;
 import com.oddfar.campus.common.core.page.PageUtils;
 import com.oddfar.campus.common.domain.PageResult;
 import com.oddfar.campus.common.domain.entity.SysUserEntity;
@@ -27,6 +30,7 @@ import com.oddfar.campus.common.exception.ServiceException;
 import com.oddfar.campus.common.utils.SecurityUtils;
 import com.oddfar.campus.framework.api.sysconfig.ConfigExpander;
 import com.oddfar.campus.framework.mapper.SysUserMapper;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +38,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -65,42 +70,73 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
         List<ContentVo> contentVoList = contentMapper.selectContentList(contentEntity);
 
-        List<ContentVo> contentVos = new ArrayList<>();
+//        List<ContentVo> contentVos = new ArrayList<>();
+//
+//        Long currentUserId = SecurityUtils.getUserId();
+//        List<Long> blockList = userRelationMapper.getBlockList(userId);
+//        List<Long> followList = userRelationMapper.getFollowList(userId);
+//
+//        for (ContentVo contentVo: contentVoList) {
+//            Long tempUserId = contentVo.getUserId();
+//            Integer readLevel = userMapper.selectUserById(tempUserId).getReadLevel();
+//            if (readLevel == 0) { // 非被拉黑可见
+//                boolean flag = false;
+//                for (Long id: blockList) {
+//                    if (contentVo.getUserId().equals(id)) { // 被拉黑者发布的文章
+//                        flag = true;
+//                        break;
+//                    }
+//                }
+//                if (!flag)
+//                    contentVos.add(contentVo);
+//            }
+//            else if (readLevel == 1) { // 关注可见
+//                boolean flag = false;
+//                for (Long id: followList) {
+//                    if (contentVo.getUserId().equals(id) || contentVo.getUserId().equals(userId)) { // 关注者发布的文章
+//                        flag = true;
+//                        break;
+//                    }
+//                }
+//                if (flag)
+//                    contentVos.add(contentVo);
+//            }
+//        }
 
-        Long userId = SecurityUtils.getUserId();
-        List<Long> blockList = userRelationMapper.getBlockList(userId);
-        List<Long> followList = userRelationMapper.getFollowList(userId);
+//        for (ContentVo contentVo: contentVoList) {
+//            if (contentVo.getUserId().equals(currentUserId)) { // 自己的文章可以读
+//                contentVos.add(contentVo);
+//                continue;
+//            }
+//
+//            Integer readLevel = contentVo.getReadLevel(); // 文章可读等级
+//            Long contentAuthorID = contentVo.getUserId(); // 文章作者ID
+//
+//            LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX = new LambdaQueryWrapperX<>();
+//            lambdaQueryWrapperX.eq(UserRelationEntity::getSenderId, contentAuthorID);
+//            lambdaQueryWrapperX.eq(UserRelationEntity::getReceiverId, currentUserId); // 当前登录者
+//            UserRelationEntity userRelation = userRelationMapper.selectOne(lambdaQueryWrapperX); // 文章发表者与当前登录者关系
+//            if (userRelation != null) { // 文章发表者与当前登录者有关系
+//                Integer relationType = userRelation.getType();
+//                if (relationType.equals(CampusConstant.RELATION_BLOCK)) { // 当前登录者为被拉黑关系，不可看
+//                    continue;
+//                }
+//                // 至少是关注关系
+//                else {
+//                    contentVos.add(contentVo);
+//                }
+//            }
+//            else { // 文章发表者与当前登录者没有关系
+//                if (readLevel.equals(CampusConstant.CONTENT_READ_FOLLOW)) { // 文章仅关注可读，两者没有关注关系，不可看
+//                    continue;
+//                }
+//                else { // 文章为非拉黑可读，可看
+//                    contentVos.add(contentVo);
+//                }
+//            }
+//        }
 
-        for (ContentVo contentVo: contentVoList) {
-            Long tempUserId = contentVo.getUserId();
-            Integer readLevel = userMapper.selectUserById(tempUserId).getReadLevel();
-            if (readLevel == 0) { // 非被拉黑可见
-                boolean flag = false;
-                for (Long id: blockList) {
-                    if (contentVo.getUserId().equals(id)) { // 被拉黑者发布的文章
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag)
-                    contentVos.add(contentVo);
-            }
-            else if (readLevel == 1) { // 关注可见
-                boolean flag = false;
-                for (Long id: followList) {
-                    if (contentVo.getUserId().equals(id) || contentVo.getUserId().equals(userId)) { // 关注者发布的文章
-                        flag = true;
-                        break;
-                    }
-                }
-                if (flag)
-                    contentVos.add(contentVo);
-            }
-        }
-
-        for (ContentVo contentVo: contentVos) {
-            System.out.println(contentVo);
-        }
+        List<ContentVo> contentVos = contentFilter(contentVoList);
 
         setAnonymous(contentVos);
         //获取文件url列表
@@ -109,6 +145,50 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         setTagListByContentVos(contentVos);
 
         return PageUtils.getPageResult(contentVos);
+    }
+
+    /**
+     * 文章可读过滤
+     * @param contentVoList 待过滤文章列表
+     * @return 可读文章列表
+     */
+    private List<ContentVo> contentFilter(List<ContentVo> contentVoList) {
+        List<ContentVo> contentVos = new ArrayList<>();
+        for (ContentVo contentVo: contentVoList) {
+            if (checkContentCanRead(contentVo)) {
+                contentVos.add(contentVo);
+            }
+        }
+        return contentVos;
+    }
+
+
+    /**
+     * 当前登录者是否可读该文章
+     * @param contentVo 文章
+     * @return 是否可读
+     */
+    @Override
+    public boolean checkContentCanRead(ContentVo contentVo) {
+        Long contentAuthorId = contentVo.getUserId();
+        Long currentUserId = SecurityUtils.getUserId();
+        if (currentUserId.equals(contentAuthorId)) // 自己可读自己的文章
+            return true;
+        LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX = new LambdaQueryWrapperX<>();
+        lambdaQueryWrapperX.eq(UserRelationEntity::getSenderId, contentAuthorId);
+        lambdaQueryWrapperX.eq(UserRelationEntity::getReceiverId, currentUserId);
+        UserRelationEntity relation = userRelationMapper.selectOne(lambdaQueryWrapperX);
+        if (relation != null) { // 两者有关系
+            if (relation.getType().equals(CampusConstant.RELATION_BLOCK)) // 被拉黑，不可读
+                return false;
+            // 有关系且非拉黑则至少是关注，可读
+        }
+        else { // 文章发表者与当前登录者没有关系
+            if (contentVo.getReadLevel().equals(CampusConstant.CONTENT_READ_FOLLOW))  // 文章仅关注可读，两者没有关注关系，不可看
+                return false;
+            // 文章为非拉黑可读，可读
+        }
+        return true;
     }
 
     @Override

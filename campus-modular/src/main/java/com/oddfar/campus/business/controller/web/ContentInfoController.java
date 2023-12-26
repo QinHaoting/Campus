@@ -104,15 +104,20 @@ public class ContentInfoController {
             }
         }
         ContentVo contentVo = contentService.selectContentByContentId(contentEntity);
-        R r = new R();
-        if (contentVo != null) {
-            r.put("data", contentVo);
-            if (SecurityUtils.isLogin()) {
-                r.put("isLove", loveService.isLove(SecurityUtils.getUserId(), contentVo.getContentId()));
-            } else {
-                r.put("isLove", false);
+        R r = new R(); // 返回值
+        if (contentVo != null) { // 文章不为空
+            boolean flag = contentService.checkContentCanRead(contentVo);
+            if (!flag) { // 不可读
+                return R.error("无可读权限");
             }
-
+            else { // 可读
+                r.put("data", contentVo);
+                if (SecurityUtils.isLogin()) {
+                    r.put("isLove", loveService.isLove(SecurityUtils.getUserId(), contentVo.getContentId()));
+                } else {
+                    r.put("isLove", false);
+                }
+            }
         }
         return r;
     }

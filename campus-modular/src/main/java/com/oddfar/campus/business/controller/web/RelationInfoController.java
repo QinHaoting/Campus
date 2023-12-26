@@ -1,5 +1,6 @@
 package com.oddfar.campus.business.controller.web;
 
+import com.oddfar.campus.business.core.constant.MessageConstant;
 import com.oddfar.campus.business.service.UserRelationService;
 import com.oddfar.campus.common.annotation.ApiResource;
 import com.oddfar.campus.common.domain.PageResult;
@@ -27,13 +28,17 @@ public class RelationInfoController {
     @PreAuthorize("@ss.resourceAuth()")
     @PostMapping(value = "/follow/{receiverID}", name = "关注")
     public R follow(@PathVariable Long receiverID) {
-        Long userId = SecurityUtils.getUserId();
-        int flag = userRelationService.follow(userId, receiverID);
+        Long senderId = SecurityUtils.getUserId();
+        if (senderId.equals(receiverID)) { // 自己不能与自己建立关系
+            System.out.println("error message:" + MessageConstant.getMessage(MessageConstant.RELATION_NO_LEGAL));
+            return R.error(MessageConstant.getMessage(MessageConstant.RELATION_NO_LEGAL));
+        }
+        int flag = userRelationService.follow(senderId, receiverID);
         if (flag == 1) {
-            return R.ok().setData("关注成功");
+            return R.ok("关注成功");
         }
         else {
-            return R.ok().setData("已关注");
+            return R.ok("已关注");
         }
     }
 
@@ -45,13 +50,13 @@ public class RelationInfoController {
     @PreAuthorize("@ss.resourceAuth()")
     @PostMapping(value = "/cancelFollow/{receiverID}", name = "取消关注")
     public R cancelFollow(@PathVariable Long receiverID) {
-        Long userId = SecurityUtils.getUserId();
-        int flag = userRelationService.cancelFollow(userId, receiverID);
+        Long senderId = SecurityUtils.getUserId();
+        int flag = userRelationService.cancelFollow(senderId, receiverID);
         if (flag == 1) {
-            return R.ok().setData("取消关注成功");
+            return R.ok("取消关注成功");
         }
         else {
-            return R.ok().setData("不存在关注关系");
+            return R.error("不存在关注关系");
         }
     }
 
@@ -63,13 +68,13 @@ public class RelationInfoController {
     @PreAuthorize("@ss.resourceAuth()")
     @PutMapping(value = "/specialFollow/{receiverID}", name = "特别关注")
     public R specialFollow(@PathVariable Long receiverID) {
-        Long userId = SecurityUtils.getUserId();
-        int flag = userRelationService.specialFollow(userId, receiverID);
+        Long senderId = SecurityUtils.getUserId();
+        int flag = userRelationService.specialFollow(senderId, receiverID);
         if (flag == 1) {
-            return R.ok().setData("特别关注成功");
+            return R.ok("特别关注成功");
         }
         else {
-            return R.ok().setData("特别关注失败，未建立关注");
+            return R.error("特别关注失败，未建立关注");
         }
     }
 
@@ -84,10 +89,10 @@ public class RelationInfoController {
         Long userId = SecurityUtils.getUserId();
         int flag = userRelationService.cancelSpecialFollow(userId, receiverID);
         if (flag == 1) {
-            return R.ok().setData("取消特别关注成功");
+            return R.ok("取消特别关注成功");
         }
         else {
-            return R.ok().setData("不存在特别关注关系");
+            return R.error("不存在特别关注关系");
         }
     }
 
@@ -99,13 +104,16 @@ public class RelationInfoController {
     @PreAuthorize("@ss.resourceAuth()")
     @PostMapping(value = "/block/{receiverID}", name = "拉黑")
     public R block(@PathVariable Long receiverID) {
-        Long userId = SecurityUtils.getUserId();
-        int flag = userRelationService.block(userId, receiverID);
+        Long senderId = SecurityUtils.getUserId();
+        if (senderId.equals(receiverID)) { // 自己不能与自己建立关系
+            return R.error(MessageConstant.getMessage(MessageConstant.RELATION_NO_LEGAL));
+        }
+        int flag = userRelationService.block(senderId, receiverID);
         if (flag == 1) {
-            return R.ok().setData("拉黑成功");
+            return R.ok("拉黑成功");
         }
         else {
-            return R.ok().setData("拉黑失败");
+            return R.error("拉黑失败");
         }
     }
 
@@ -117,13 +125,13 @@ public class RelationInfoController {
     @PreAuthorize("@ss.resourceAuth()")
     @PostMapping(value = "/cancelBlock/{receiverID}", name = "取消拉黑")
     public R cancelBlock(@PathVariable Long receiverID) {
-        Long userId = SecurityUtils.getUserId();
-        int flag = userRelationService.cancelFollow(userId, receiverID);
+        Long senderId = SecurityUtils.getUserId();
+        int flag = userRelationService.cancelFollow(senderId, receiverID);
         if (flag == 1) {
-            return R.ok().setData("取消拉黑成功");
+            return R.ok("取消拉黑成功");
         }
         else {
-            return R.ok().setData("不存在拉黑关系");
+            return R.error("不存在拉黑关系");
         }
     }
 

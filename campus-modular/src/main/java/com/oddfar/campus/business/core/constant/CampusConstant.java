@@ -40,7 +40,7 @@ public class CampusConstant {
     /**
      * 用户关系-关注
      */
-    public static final Integer RELATION_FOLLOW = 1; // "关注"
+    public static final Integer RELATION_FOLLOW = 1;
 
     /**
      * 用户关系-特别关注

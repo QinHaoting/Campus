@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageInfo;
 import com.oddfar.campus.business.core.constant.CampusConstant;
 import com.oddfar.campus.business.domain.entity.UserRelationEntity;
-import com.oddfar.campus.business.domain.vo.UserRelationVo;
-import com.oddfar.campus.business.enums.CampusBizCodeEnum;
 import com.oddfar.campus.business.mapper.UserRelationMapper;
 import com.oddfar.campus.business.service.UserRelationService;
 import com.oddfar.campus.common.core.LambdaQueryWrapperX;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 

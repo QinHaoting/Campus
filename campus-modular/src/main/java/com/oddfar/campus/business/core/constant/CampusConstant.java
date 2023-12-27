@@ -60,4 +60,10 @@ public class CampusConstant {
      * 文章-关注可读
      */
     public static final Integer CONTENT_READ_FOLLOW = 1;
+
+
+    // 消息类型
+    public static final Integer MESSAGE_TYPE_TEXT = 0; // 文字
+    public static final Integer MESSAGE_TYPE_IMG = 1; // 图片
+    public static final Integer MESSAGE_TYPE_VIDEO = 2; // 视频
 }

@@ -63,7 +63,7 @@ public class ChatroomController {
      * @return 是否删除成功
      */
     @PreAuthorize("@ss.resourceAuth()")
-    @GetMapping(value = "/removeChatroom", name = "删除聊天室")
+    @DeleteMapping(value = "/removeChatroom", name = "删除聊天室")
     public R removeChatroom(Long id) {
         int flag = chatroomService.isOwner(id);
         switch (flag) {

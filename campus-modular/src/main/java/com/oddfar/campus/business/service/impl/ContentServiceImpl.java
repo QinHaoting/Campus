@@ -108,21 +108,45 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         Long currentUserId = SecurityUtils.getUserId();
         if (currentUserId.equals(contentAuthorId)) // 自己可读自己的文章
             return true;
-        LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX = new LambdaQueryWrapperX<>();
-        lambdaQueryWrapperX.eq(UserRelationEntity::getSenderId, contentAuthorId);
-        lambdaQueryWrapperX.eq(UserRelationEntity::getReceiverId, currentUserId);
-        UserRelationEntity relation = userRelationMapper.selectOne(lambdaQueryWrapperX);
-        if (relation != null) { // 两者有关系
-            if (relation.getType().equals(CampusConstant.RELATION_BLOCK)) // 被拉黑，不可读
+
+        // 文章发表者是否拉黑当前用户（文章发表者发起）
+        LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX_AuthorToCurrent = new LambdaQueryWrapperX<>();
+        lambdaQueryWrapperX_AuthorToCurrent.eq(UserRelationEntity::getSenderId, contentAuthorId);
+        lambdaQueryWrapperX_AuthorToCurrent.eq(UserRelationEntity::getReceiverId, currentUserId);
+        UserRelationEntity relationAuthorToCurrent = userRelationMapper.selectOne(lambdaQueryWrapperX_AuthorToCurrent);
+
+        // 当前用户是与文章发表者关系（当前用户发起）
+        LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX_CurrentToAuthor = new LambdaQueryWrapperX<>();
+        lambdaQueryWrapperX_CurrentToAuthor.eq(UserRelationEntity::getSenderId, currentUserId);
+        lambdaQueryWrapperX_CurrentToAuthor.eq(UserRelationEntity::getReceiverId, contentAuthorId);
+        UserRelationEntity relationCurrentToAuthor = userRelationMapper.selectOne(lambdaQueryWrapperX_CurrentToAuthor);
+
+        if (contentVo.getReadLevel().equals(CampusConstant.CONTENT_READ_FOLLOW)) { // 文章为关注可读
+            if (relationAuthorToCurrent == null ||
+                    relationAuthorToCurrent.getType().equals(CampusConstant.RELATION_BLOCK)) // 文章发表者没有关注当前用户，故当前用户不可看
                 return false;
-            // 有关系且非拉黑则至少是关注，可读
+            else { // 文章发表者已关注当前用户
+                if (relationCurrentToAuthor == null
+                        || !relationCurrentToAuthor.getType().equals(CampusConstant.RELATION_BLOCK)) // 当前用户没有拉黑文章发表者
+                    return true;
+                else { // 当前用户拉黑了文章发表者，所以当前用户看不到该文章
+                    return false;
+                }
+            }
         }
-        else { // 文章发表者与当前登录者没有关系
-            if (contentVo.getReadLevel().equals(CampusConstant.CONTENT_READ_FOLLOW))  // 文章仅关注可读，两者没有关注关系，不可看
+        else { // 文章为非拉黑可读
+            if (relationAuthorToCurrent != null &&
+                    relationAuthorToCurrent.getType().equals(CampusConstant.RELATION_BLOCK)) // 文章发表者拉黑了当前用户，故当前用户不可看
                 return false;
-            // 文章为非拉黑可读，可读
+            else { // 文章发表者没有拉黑当前用户
+                if (relationCurrentToAuthor == null
+                        || !relationCurrentToAuthor.getType().equals(CampusConstant.RELATION_BLOCK)) // 当前用户没有拉黑文章发表者
+                    return true;
+                else { // 当前用户拉黑了文章发表者，所以当前用户看不到该文章
+                    return false;
+                }
+            }
         }
-        return true;
     }
 
     /**

@@ -81,10 +81,10 @@ public class SysUserEntity extends BaseEntity  {
     /** 个人经历 */
     private String experience;
 
-    /**
-     * 文章可见等级
-     */
-    private Integer readLevel;
+//    /**
+//     * 文章可见等级
+//     */
+//    private Integer readLevel;
 
     /** 角色对象 */
     @TableField(exist = false)

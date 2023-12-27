@@ -106,7 +106,7 @@ public class RelationInfoController {
     public R block(@PathVariable Long receiverID) {
         Long senderId = SecurityUtils.getUserId();
         if (senderId.equals(receiverID)) { // 自己不能与自己建立关系
-            return R.error(MessageConstant.getMessage(MessageConstant.RELATION_NO_LEGAL));
+            return R.error("不能拉黑自己");
         }
         int flag = userRelationService.block(senderId, receiverID);
         if (flag == 1) {

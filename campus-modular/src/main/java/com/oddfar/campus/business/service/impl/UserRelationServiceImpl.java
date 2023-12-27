@@ -163,19 +163,9 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         List<Long> receiverIDs = userRelationMapper.getFollowList(userId); // 被关注用户列表ID
         // 获取总关注数
         long total = new PageInfo(receiverIDs).getTotal();
-
-        List<SysUserEntity> users = new ArrayList<>();
-        SysUserEntity user;
-        // TODO 隐藏信息
-        for (Long id : receiverIDs) {
-            user = userMapper.selectUserById(id);
-            user.setPassword(null);
-            user.setEmail(null);
-            user.setPhonenumber(null);
-            user.setLoginIp(null);
-            user.setLoginDate(null);
-            users.add(user);
-        }
+        // 隐藏信息
+        List<SysUserEntity> users = userMapper.selectBatchIds(receiverIDs);
+        hideUserInfo(users);
         return new PageResult<>(users, total);
     }
 
@@ -192,18 +182,9 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         // 获取总关注数
         long total = new PageInfo(receiverIDs).getTotal();
 
-        List<SysUserEntity> users = new ArrayList<>();
-        SysUserEntity user;
         // TODO 隐藏信息
-        for (Long id : receiverIDs) {
-            user = userMapper.selectUserById(id);
-            user.setPassword(null);
-            user.setEmail(null);
-            user.setPhonenumber(null);
-            user.setLoginIp(null);
-            user.setLoginDate(null);
-            users.add(user);
-        }
+        List<SysUserEntity> users = userMapper.selectBatchIds(receiverIDs);
+        hideUserInfo(users);
         return new PageResult<>(users, total);
     }
 
@@ -220,18 +201,9 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         // 获取总关注数
         long total = new PageInfo(receiverIDs).getTotal();
 
-        List<SysUserEntity> users = new ArrayList<>();
-        SysUserEntity user;
         // TODO 隐藏信息
-        for (Long id : receiverIDs) {
-            user = userMapper.selectUserById(id);
-            user.setPassword(null);
-            user.setEmail(null);
-            user.setPhonenumber(null);
-            user.setLoginIp(null);
-            user.setLoginDate(null);
-            users.add(user);
-        }
+        List<SysUserEntity> users = userMapper.selectBatchIds(receiverIDs);
+        hideUserInfo(users);
         return new PageResult<>(users, total);
     }
 
@@ -248,6 +220,16 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
     @Override
     public boolean isBlock(Long senderId, Long receiverId) {
         return false;
+    }
+
+    static void hideUserInfo(List<SysUserEntity> users) {
+        for (SysUserEntity user: users) {
+            user.setPassword(null);
+            user.setEmail(null);
+            user.setPhonenumber(null);
+            user.setLoginIp(null);
+            user.setLoginDate(null);
+        }
     }
 }
 

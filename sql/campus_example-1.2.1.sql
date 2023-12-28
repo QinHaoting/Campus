@@ -11,7 +11,7 @@
  Target Server Version : 80025
  File Encoding         : 65001
 
- Date: 27/12/2023 23:54:02
+ Date: 28/12/2023 15:47:46
 */
 
 SET NAMES utf8mb4;
@@ -63,18 +63,20 @@ CREATE TABLE `campus_chatroom`  (
   `chatroom_id` bigint NOT NULL AUTO_INCREMENT COMMENT '聊天室主键ID',
   `owner_id` bigint NULL DEFAULT NULL COMMENT '聊天室群主',
   `user_ids` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '聊天室用户列表',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '聊天室名称',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`chatroom_id`) USING BTREE,
   INDEX `owner_id`(`owner_id`) USING BTREE,
   CONSTRAINT `campus_chatroom_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `sys_user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of campus_chatroom
 -- ----------------------------
-INSERT INTO `campus_chatroom` VALUES (1, 1594285543804383234, '{1739160897580417034:\"2023-12-27 21:52:36.192\",1:\"2023-12-27 21:52:36.192\",2:\"2023-12-27 21:52:36.192\",1594285543804383234:\"2023-12-27 21:52:36.192\"}', '2023-12-27 21:52:36');
-INSERT INTO `campus_chatroom` VALUES (6, 1, '{1:\"2023-12-27 22:06:22.671\",2:\"2023-12-27 22:06:22.671\"}', '2023-12-27 22:06:23');
-INSERT INTO `campus_chatroom` VALUES (7, 1594285543804383234, '{2:\"2023-12-27 22:06:44.944\",1594285543804383234:\"2023-12-27 22:06:44.944\"}', '2023-12-27 22:06:45');
+INSERT INTO `campus_chatroom` VALUES (1, 1594285543804383234, '{1739160897580417034:\"2023-12-27 21:52:36.192\",1:\"2023-12-27 21:52:36.192\",2:\"2023-12-27 21:52:36.192\",1594285543804383234:\"2023-12-27 21:52:36.192\"}', '我们的家', '2023-12-27 21:52:36');
+INSERT INTO `campus_chatroom` VALUES (6, 1, '{1:\"2023-12-27 22:06:22.671\",2:\"2023-12-27 22:06:22.671\"}', 'KD后援团', '2023-12-27 22:06:23');
+INSERT INTO `campus_chatroom` VALUES (7, 1594285543804383234, '{2:\"2023-12-27 22:06:44.944\",1594285543804383234:\"2023-12-27 22:06:44.944\"}', '180俱乐部', '2023-12-27 22:06:45');
+INSERT INTO `campus_chatroom` VALUES (8, 1594285543804383234, '{1594285543804383234:\"2023-12-28 14:59:24.755\",1737940657664077827:\"2023-12-28 14:59:24.755\"}', '测试账号用户1、', '2023-12-28 14:59:25');
 
 -- ----------------------------
 -- Table structure for campus_comment
@@ -249,13 +251,14 @@ CREATE TABLE `campus_message`  (
   INDEX `receiver_id`(`receiver_id`) USING BTREE,
   CONSTRAINT `campus_message_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `sys_user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `campus_message_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `campus_chatroom` (`chatroom_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of campus_message
 -- ----------------------------
-INSERT INTO `campus_message` VALUES (1, 1594285543804383234, 1, '大家伙早咯', 0, '2023-12-27 22:39:48');
-INSERT INTO `campus_message` VALUES (2, 1594285543804383234, 1, '晚上好各位', 0, '2023-12-27 23:37:12');
+INSERT INTO `campus_message` VALUES (2, 1594285543804383234, 1, '晚上好各位', 0, '2023-12-28 15:25:11');
+INSERT INTO `campus_message` VALUES (4, 1594285543804383234, 1, '大家伙早咯', 0, '2023-12-28 15:23:42');
+INSERT INTO `campus_message` VALUES (5, 1594285543804383234, 1, '大家伙早咯', 0, '2023-12-28 15:39:22');
 
 -- ----------------------------
 -- Table structure for campus_relation
@@ -274,7 +277,7 @@ CREATE TABLE `campus_relation`  (
   INDEX `sender_id_2`(`sender_id`, `receiver_id`) USING BTREE,
   CONSTRAINT `campus_relation_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `sys_user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `campus_relation_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `sys_user` (`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1739160897580417037 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1739160897580417039 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of campus_relation
@@ -361,7 +364,7 @@ CREATE TABLE `sys_config`  (
   `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `update_user` bigint NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`config_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1637978359153885186 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '参数配置表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1637978359153885187 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '参数配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_config
@@ -412,7 +415,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_user` bigint NULL DEFAULT NULL COMMENT '更新者',
   `del_flag` bit(1) NULL DEFAULT b'0' COMMENT '逻辑删除(1:已删除，0:未删除)',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1621418087714918401 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1621418087714918402 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -486,7 +489,7 @@ CREATE TABLE `sys_log_login`  (
   `msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `login_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`info_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1739647556390363137 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1740249747094478850 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_log_login
@@ -729,6 +732,9 @@ INSERT INTO `sys_log_login` VALUES (1740007256269250561, 1594285543804383234, 't
 INSERT INTO `sys_log_login` VALUES (1740008405303025666, 1, 'admin', '0', '127.0.0.1', '内网IP', 'Unknown', 'Unknown', '登录成功', '2023-12-27 21:55:06');
 INSERT INTO `sys_log_login` VALUES (1740011306167558146, 1594285543804383234, 'test', '0', '127.0.0.1', '内网IP', 'Unknown', 'Unknown', '登录成功', '2023-12-27 22:06:38');
 INSERT INTO `sys_log_login` VALUES (1740013832191336450, 1594285543804383234, 'test', '0', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '登录成功', '2023-12-27 22:16:40');
+INSERT INTO `sys_log_login` VALUES (1740249663556526081, 1, 'admin', '0', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '登录成功', '2023-12-28 13:53:47');
+INSERT INTO `sys_log_login` VALUES (1740249747094478849, 1594285543804383234, 'test', '0', '127.0.0.1', '内网IP', 'Unknown', 'Unknown', '登录成功', '2023-12-28 13:54:07');
+INSERT INTO `sys_log_login` VALUES (1740270899330248705, 1594285543804383234, 'test', '0', '127.0.0.1', '内网IP', 'Chrome 12', 'Windows 10', '登录成功', '2023-12-28 15:18:10');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -756,7 +762,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   `create_user` bigint NULL DEFAULT NULL COMMENT '创建者',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1738648540370378754 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1738648540370378755 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -883,131 +889,132 @@ CREATE TABLE `sys_resource`  (
 -- ----------------------------
 -- Records of sys_resource
 -- ----------------------------
-INSERT INTO `sys_resource` VALUES (1740037543631925249, 'oddfar', 'oddfar.sys_dict_type.edit', '字典类型管理-修改', 'SysDictTypeController', 'edit', '字典类型管理', '/system/dict/type', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925250, 'campus', 'campus.comment.list', 'list', 'CommentController', 'list', '评论管理', '/admin/comment/list', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925251, 'oddfar', 'oddfar.sys_dict_type.optionselect', '字典类型管理-获取字典选择框列表', 'SysDictTypeController', 'optionselect', '字典类型管理', '/system/dict/type/optionselect', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925252, 'campus', 'campus.category.edit', '修改分类', 'CategoryController', 'edit', '分类管理', '/admin/category', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925253, 'oddfar', 'oddfar.sys_login.get_routers', '获取路由信息', 'SysLoginController', 'getRouters', '登录路由', '/getRouters', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925254, 'message', 'message.message.delete_message', '删除消息', 'MessageController', 'deleteMessage', '消息api', '/message/deleteMessage', 'delete', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925255, 'oddfar', 'oddfar.sys_menu.tree_select', '菜单管理-获取菜单下拉树列表', 'SysMenuController', 'treeSelect', '菜单管理', '/system/menu/treeselect', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925256, 'campus', 'campus.user_action.image_upload', '图片文件上传', 'UserActionController', 'imageUpload', '用户操作api', '/campus/imageUpload', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925257, 'oddfar', 'oddfar.sys_role.remove', 'remove', 'SysRoleController', 'remove', '角色管理', '/system/role/{roleIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925258, 'oddfar', 'oddfar.sys_menu.role_menu_treeselect', '菜单管理-加载对应角色菜单列表树', 'SysMenuController', 'roleMenuTreeselect', '菜单管理', '/system/menu/roleMenuTreeselect/{roleId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925259, 'oddfar', 'oddfar.sys_profile.update_profile', 'updateProfile', 'SysProfileController', 'updateProfile', '个人信息管理', '/system/user/profile/个人信息管理-修改', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925260, 'campus', 'campus.user_account.send_reset_pwd_code', 'sendResetPwdCode', 'UserAccountController', 'sendResetPwdCode', '用户账户操作api', '/campus/pwd-code', 'post', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925261, 'oddfar', 'oddfar.sys_role.add', 'add', 'SysRoleController', 'add', '角色管理', '/system/role', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925262, 'campus', 'campus.comment_info.to_comment', '添加评论', 'CommentInfoController', 'toComment', '评论api', '/campus/toComment', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925263, 'relation', 'relation.relation_info.cancel_block', '取消拉黑', 'RelationInfoController', 'cancelBlock', '关系api', '/relation/cancelBlock/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925264, 'oddfar', 'oddfar.sys_login.login', '登录方法', 'SysLoginController', 'login', '登录路由', '/login', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925265, 'relation', 'relation.relation_info.get_block_list', '查询黑名单', 'RelationInfoController', 'getBlockList', '关系api', '/relation/blockList', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925266, 'oddfar', 'oddfar.sys_role.get_info', 'getInfo', 'SysRoleController', 'getInfo', '角色管理', '/system/role/{roleId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925267, 'message', 'message.message.send_message', '发送消息', 'MessageController', 'sendMessage', '消息api', '/message/sendMessage', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925268, 'oddfar', 'oddfar.sys_user.auth_role', 'authRole', 'SysUserController', 'authRole', '用户管理', '/system/user/authRole/{userId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925269, 'oddfar', 'oddfar.sys_config.edit', '参数配置管理-修改', 'SysConfigController', 'edit', '参数配置管理', '/system/config', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925270, 'oddfar', 'oddfar.sys_menu.edit', '菜单管理-修改', 'SysMenuController', 'edit', '菜单管理', '/system/menu', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925271, 'relation', 'relation.relation_info.cancel_special_follow', '取消特别关注', 'RelationInfoController', 'cancelSpecialFollow', '关系api', '/relation/cancelSpecialFollow/{receiverID}', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543631925272, 'campus', 'campus.content.page', '分页', 'ContentController', 'page', '内容管理', '/admin/content/list', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142978, 'oddfar', 'oddfar.sys_user.insert_auth_role', 'insertAuthRole', 'SysUserController', 'insertAuthRole', '用户管理', '/system/user/authRole', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142979, 'oddfar', 'oddfar.sys_logininfor.list', '登录日志-分类列表', 'SysLogininforController', 'list', '登录日志管理', '/monitor/logininfor/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142980, 'oddfar', 'oddfar.sys_config.refresh_cache', '参数配置管理-刷新缓存', 'SysConfigController', 'refreshCache', '参数配置管理', '/system/config/refreshCache', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142981, 'oddfar', 'oddfar.sys_role.cancel_auth_user_all', 'cancelAuthUserAll', 'SysRoleController', 'cancelAuthUserAll', '角色管理', '/system/role/authUser/cancelAll', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142982, 'relation', 'relation.relation_info.get_special_follow_list', '查询特别关注列表', 'RelationInfoController', 'getSpecialFollowList', '关系api', '/relation/specialFollowList', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142983, 'oddfar', 'oddfar.sys_operlog.clean', '操作日志-清空', 'SysOperlogController', 'clean', '操作日志管理', '/monitor/operlog/clean', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142984, 'oddfar', 'oddfar.sys_dict_type.get_info', '字典类型管理-查询', 'SysDictTypeController', 'getInfo', '字典类型管理', '/system/dict/type/{dictId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142985, 'oddfar', 'oddfar.sys_user.update', 'update', 'SysUserController', 'update', '用户管理', '/system/user', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142986, 'oddfar', 'oddfar.sys_api_resource.edit_role_resource', '修改对应角色api资源', 'SysApiResourceController', 'editRoleResource', '资源管理', '/system/resource/roleApi', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142987, 'oddfar', 'oddfar.sys_role.unallocated_list', 'unallocatedList', 'SysRoleController', 'unallocatedList', '角色管理', '/system/role/authUser/unallocatedList', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142988, 'oddfar', 'oddfar.sys_logininfor.clean', '登录日志-清空', 'SysLogininforController', 'clean', '登录日志管理', '/monitor/logininfor/clean', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142989, 'campus', 'campus.campus_info.category_list', '查询分类列表', 'CampusInfoController', 'categoryList', '校园墙信息api', '/campus/categoryList', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142990, 'campus', 'campus.content_info.del_content', '删除自己的校园墙', 'ContentInfoController', 'delContent', '信息墙api', '/campus/delContent/{contentId}', 'delete', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142991, 'oddfar', 'oddfar.sys_role.change_status', 'changeStatus', 'SysRoleController', 'changeStatus', '角色管理', '/system/role/changeStatus', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142992, 'message', 'message.chatroom.get_members', '获取聊天室成员', 'ChatroomController', 'getMembers', '聊天室api', '/chatroom/getMembers', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142993, 'oddfar', 'oddfar.sys_logininfor.remove', '登录日志-删除', 'SysLogininforController', 'remove', '登录日志管理', '/monitor/logininfor/{infoIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142994, 'campus', 'campus.tag.add', 'add', 'TagController', 'add', '标签管理', '/admin/tag', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142995, 'campus', 'campus.comment_info.get_comment', '添加评论', 'CommentInfoController', 'getComment', '评论api', '/campus/getComment', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142996, 'oddfar', 'oddfar.sys_dict_data.remove', '字典数据管理-删除', 'SysDictDataController', 'remove', '字典数据管理', '/system/dict/data/{dictCodes}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142997, 'campus', 'campus.content_info.get_content_by_id', '查询信息墙详细内容', 'ContentInfoController', 'getContentById', '信息墙api', '/campus/getContent', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142998, 'oddfar', 'oddfar.sys_dict_data.get_info', '字典数据管理-查询', 'SysDictDataController', 'getInfo', '字典数据管理', '/system/dict/data/{dictCode}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766142999, 'campus', 'campus.content_info.get_own_love_content', '查询点赞的信息墙列表', 'ContentInfoController', 'getOwnLoveContent', '信息墙api', '/campus/getOwnLoveContent', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143000, 'campus', 'campus.comment.add', 'add', 'CommentController', 'add', '评论管理', '/admin/comment', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143001, 'campus', 'campus.tag.list', 'list', 'TagController', 'list', '标签管理', '/admin/tag/list', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143002, 'message', 'message.message.update_message', '修改消息', 'MessageController', 'updateMessage', '消息api', '/message/updateMessage', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143003, 'oddfar', 'oddfar.sys_login.get_info', '获取用户信息', 'SysLoginController', 'getInfo', '登录路由', '/getInfo', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143004, 'campus', 'campus.content.get_info', '获取校园墙内容', 'ContentController', 'getInfo', '内容管理', '/admin/content/{contentId}', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143005, 'oddfar', 'oddfar.sys_user.reset_pwd', 'resetPwd', 'SysUserController', 'resetPwd', '用户管理', '/system/user/resetPwd', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143006, 'oddfar', 'oddfar.sys_menu.get_info', '菜单管理-查询', 'SysMenuController', 'getInfo', '菜单管理', '/system/menu/{menuId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143007, 'oddfar', 'oddfar.sys_role.cancel_auth_user', 'cancelAuthUser', 'SysRoleController', 'cancelAuthUser', '角色管理', '/system/role/authUser/cancel', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143008, 'oddfar', 'oddfar.sys_menu.remove', '菜单管理-删除', 'SysMenuController', 'remove', '菜单管理', '/system/menu/{menuId}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143009, 'oddfar', 'oddfar.sys_role.list', 'list', 'SysRoleController', 'list', '角色管理', '/system/role/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143010, 'oddfar', 'oddfar.sys_dict_type.refresh_cache', '字典类型管理-刷新', 'SysDictTypeController', 'refreshCache', '字典类型管理', '/system/dict/type/refreshCache', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143011, 'oddfar', 'oddfar.sys_menu.add', '菜单管理-新增', 'SysMenuController', 'add', '菜单管理', '/system/menu', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143012, 'oddfar', 'oddfar.sys_user.page', 'page', 'SysUserController', 'page', '用户管理', '/system/user/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143013, 'oddfar', 'oddfar.sys_role.allocated_list', 'allocatedList', 'SysRoleController', 'allocatedList', '角色管理', '/system/role/authUser/allocatedList', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143014, 'relation', 'relation.relation_info.special_follow', '特别关注', 'RelationInfoController', 'specialFollow', '关系api', '/relation/specialFollow/{receiverID}', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143015, 'campus', 'campus.tag.remove', 'remove', 'TagController', 'remove', '标签管理', '/admin/tag/{tagIds}', 'delete', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143016, 'oddfar', 'oddfar.sys_dict_data.edit', '字典数据管理-修改', 'SysDictDataController', 'edit', '字典数据管理', '/system/dict/data', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143017, 'campus', 'campus.category.remove', '删除分类', 'CategoryController', 'remove', '分类管理', '/admin/category/{categoryId}', 'delete', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143018, 'campus', 'campus.user_account.send_mail', 'sendMail', 'UserAccountController', 'sendMail', '用户账户操作api', '/campus/bindMail', 'post', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143019, 'oddfar', 'oddfar.sys_operlog.list', '操作日志-分页', 'SysOperlogController', 'list', '操作日志管理', '/monitor/operlog/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143020, 'campus', 'campus.category.add', '新增分类', 'CategoryController', 'add', '分类管理', '/admin/category', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143021, 'oddfar', 'oddfar.sys_role.select_auth_user_all', 'selectAuthUserAll', 'SysRoleController', 'selectAuthUserAll', '角色管理', '/system/role/authUser/selectAll', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143022, 'oddfar', 'oddfar.sys_config.add', '参数配置管理-新增', 'SysConfigController', 'add', '参数配置管理', '/system/config', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143023, 'oddfar', 'oddfar.sys_dict_type.remove', '字典类型管理-删除', 'SysDictTypeController', 'remove', '字典类型管理', '/system/dict/type/{dictIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143024, 'campus', 'campus.comment_info.get_comment_children_list', '查询一级评论的子评论', 'CommentInfoController', 'getCommentChildrenList', '评论api', '/campus/getCommentChildrenList', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143025, 'campus', 'campus.content_info.update_content', '修改信息墙', 'ContentInfoController', 'updateContent', '信息墙api', '/campus/updateContent', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143026, 'campus', 'campus.content.remove', 'remove', 'ContentController', 'remove', '内容管理', '/admin/content/{contentIds}', 'delete', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143027, 'oddfar', 'oddfar.sys_config.get_info', '参数配置管理-查询id信息', 'SysConfigController', 'getInfo', '参数配置管理', '/system/config/{id}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143028, 'relation', 'relation.relation_info.cancel_follow', '取消关注', 'RelationInfoController', 'cancelFollow', '关系api', '/relation/cancelFollow/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143029, 'oddfar', 'oddfar.sys_config.remove', '参数配置管理-删除', 'SysConfigController', 'remove', '参数配置管理', '/system/config/{configIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143030, 'campus', 'campus.comment_info.get_own_comment_list', '分页查询自己发布或回复的评论列表', 'CommentInfoController', 'getOwnCommentList', '评论api', '/campus/getOwnComment', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143031, 'campus', 'campus.content.edit', '修改信息墙内容', 'ContentController', 'edit', '内容管理', '/admin/content/', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143032, 'oddfar', 'oddfar.sys_dict_data.add', '字典数据管理-新增', 'SysDictDataController', 'add', '字典数据管理', '/system/dict/data', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143033, 'campus', 'campus.content_info.own_contents', '查看自己的单个信息墙', 'ContentInfoController', 'ownContents', '信息墙api', '/campus/ownContents', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143034, 'oddfar', 'oddfar.sys_dict_data.dict_type', '字典数据管理-根据字典类型查询字典数据信息', 'SysDictDataController', 'dictType', '字典数据管理', '/system/dict/data/type/{dictType}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143035, 'campus', 'campus.category.list', '查询分类列表', 'CategoryController', 'list', '分类管理', '/admin/category/list', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543766143036, 'oddfar', 'oddfar.sys_config.get_config_key', 'getConfigKey', 'SysConfigController', 'getConfigKey', '参数配置管理', '/system/config/configKey/{configKey:.+}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251841, 'oddfar', 'oddfar.sys_profile.avatar', '个人信息管理-头像上次', 'SysProfileController', 'avatar', '个人信息管理', '/system/user/profile/avatar', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251842, 'oddfar', 'oddfar.sys_user.get_info', 'getInfo', 'SysUserController', 'getInfo', '用户管理', '/system/user/{userId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251843, 'message', 'message.message.get_message_by_ID', '获取指定聊天室消息', 'MessageController', 'getMessageByID', '消息api', '/message/getMessage', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251844, 'campus', 'campus.comment.edit', 'edit', 'CommentController', 'edit', '评论管理', '/admin/comment', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251845, 'campus', 'campus.comment_info.get_one_level_comment', '查询一级评论', 'CommentInfoController', 'getOneLevelComment', '评论api', '/campus/getOneLevelComment', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251846, 'campus', 'campus.user_account.change_pwd', 'changePwd', 'UserAccountController', 'changePwd', '用户账户操作api', '/campus/changePwd', 'post', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251847, 'oddfar', 'oddfar.sys_config.page', '参数配置管理-分页', 'SysConfigController', 'page', '参数配置管理', '/system/config/page', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251848, 'campus', 'campus.comment_info.get_comment_children', '分页查询一级评论的子评论', 'CommentInfoController', 'getCommentChildren', '评论api', '/campus/getCommentChildren', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251849, 'campus', 'campus.comment_info.del_own_comment', '删除自己的评论', 'CommentInfoController', 'delOwnComment', '评论api', '/campus/delOwnComment', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251850, 'oddfar', 'oddfar.sys_menu.list', '菜单管理-分页', 'SysMenuController', 'list', '菜单管理', '/system/menu/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251851, 'campus', 'campus.content_info.get_content_by_condition', '条件查询信息墙', 'ContentInfoController', 'getContentByCondition', '信息墙api', '/campus/getContentByCondition', 'post', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251852, 'campus', 'campus.user_action.zan_content', '点赞', 'UserActionController', 'zanContent', '用户操作api', '/campus/zan/{contentId}', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251853, 'message', 'message.chatroom.create_chat_room', '创建聊天室', 'ChatroomController', 'createChatRoom', '聊天室api', '/chatroom/createChatroom', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251854, 'relation', 'relation.relation_info.block', '拉黑', 'RelationInfoController', 'block', '关系api', '/relation/block/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251855, 'oddfar', 'oddfar.sys_dict_type.list', '字典类型管理-分页', 'SysDictTypeController', 'list', '字典类型管理', '/system/dict/type/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251856, 'campus', 'campus.content_info.get_content_list', '查询信息墙内容列表', 'ContentInfoController', 'getContentList', '信息墙api', '/campus/contentList', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251857, 'oddfar', 'oddfar.sys_profile.update_pwd', '个人信息管理-重置密码', 'SysProfileController', 'updatePwd', '个人信息管理', '/system/user/profile/updatePwd', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251858, 'oddfar', 'oddfar.sys_user.remove', 'remove', 'SysUserController', 'remove', '用户管理', '/system/user/{userIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251859, 'campus', 'campus.user_account.email_validate', 'emailValidate', 'UserAccountController', 'emailValidate', '用户账户操作api', '/campus/email-validate', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251860, 'campus', 'campus.user_account.have_mail', 'haveMail', 'UserAccountController', 'haveMail', '用户账户操作api', '/campus/haveMail', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251861, 'campus', 'campus.content_info.to_content', '发表信息墙', 'ContentInfoController', 'toContent', '信息墙api', '/campus/sendContent', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251862, 'campus', 'campus.content_info.get_simple_hot_content', '查询信息墙内容列表', 'ContentInfoController', 'getSimpleHotContent', '信息墙api', '/campus/simpleHotContent', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251863, 'oddfar', 'oddfar.sys_user.add', 'add', 'SysUserController', 'add', '用户管理', '/system/user', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251864, 'campus', 'campus.category.list_select', '查询分类列表选择器', 'CategoryController', 'listSelect', '分类管理', '/admin/category/listSelect', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251865, 'message', 'message.chatroom.remove_chatroom', '删除聊天室', 'ChatroomController', 'removeChatroom', '聊天室api', '/chatroom/removeChatroom', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251866, 'campus', 'campus.user_action.video_upload', '视频文件上传', 'UserActionController', 'videoUpload', '用户操作api', '/campus/videoUpload', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251867, 'oddfar', 'oddfar.sys_user.change_status', 'changeStatus', 'SysUserController', 'changeStatus', '用户管理', '/system/user/changeStatus', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251868, 'oddfar', 'oddfar.sys_dict_data.page', '字典数据管理-分页', 'SysDictDataController', 'page', '字典数据管理', '/system/dict/data/list', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251869, 'campus', 'campus.campus_info.category_children', '查询分类子列表', 'CampusInfoController', 'categoryChildren', '校园墙信息api', '/campus/categoryChildren/{categoryId}', 'get', 1, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251870, 'campus', 'campus.category.get_info', '获取分类详细信息', 'CategoryController', 'getInfo', '分类管理', '/admin/category/{categoryId}', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251871, 'relation', 'relation.relation_info.follow', '关注', 'RelationInfoController', 'follow', '关系api', '/relation/follow/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251872, 'oddfar', 'oddfar.sys_operlog.remove', '操作日志-删除', 'SysOperlogController', 'remove', '操作日志管理', '/monitor/operlog/{operIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251873, 'campus', 'campus.comment.get_info', 'getInfo', 'CommentController', 'getInfo', '评论管理', '/admin/comment/{commentId}', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251874, 'oddfar', 'oddfar.sys_api_resource.role_menu_tree_select', '资源管理-加载对应角色资源列表树', 'SysApiResourceController', 'roleMenuTreeSelect', '资源管理', '/system/resource/roleApiTreeselect/{roleId}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251875, 'oddfar', 'oddfar.sys_profile.profile', '个人信息管理-查询', 'SysProfileController', 'profile', '个人信息管理', '/system/user/profile', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251876, 'oddfar', 'oddfar.sys_logininfor.unlock', '登录日志-解锁', 'SysLogininforController', 'unlock', '登录日志管理', '/monitor/logininfor/unlock/{userName}', 'get', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251877, 'oddfar', 'oddfar.sys_dict_type.add', '字典类型管理-新增', 'SysDictTypeController', 'add', '字典类型管理', '/system/dict/type', 'post', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251878, 'campus', 'campus.tag.get_info', 'getInfo', 'TagController', 'getInfo', '标签管理', '/admin/tag/{tagId}', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251879, 'campus', 'campus.tag.edit', 'edit', 'TagController', 'edit', '标签管理', '/admin/tag', 'put', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251880, 'relation', 'relation.relation_info.get_follow_list', '查询关注列表', 'RelationInfoController', 'getFollowList', '关系api', '/relation/followList', 'get', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251881, 'campus', 'campus.comment.remove', 'remove', 'CommentController', 'remove', '评论管理', '/admin/comment/{commentIds}', 'delete', 1, 'Y', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
-INSERT INTO `sys_resource` VALUES (1740037543833251882, 'oddfar', 'oddfar.sys_role.edit', 'edit', 'SysRoleController', 'edit', '角色管理', '/system/role', 'put', 2, 'N', b'0', NULL, '2023-12-27 23:50:53', NULL, '2023-12-27 23:50:53');
+INSERT INTO `sys_resource` VALUES (1740277948801867777, 'oddfar', 'oddfar.sys_dict_type.edit', '字典类型管理-修改', 'SysDictTypeController', 'edit', '字典类型管理', '/system/dict/type', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867778, 'campus', 'campus.comment.list', 'list', 'CommentController', 'list', '评论管理', '/admin/comment/list', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867779, 'oddfar', 'oddfar.sys_dict_type.optionselect', '字典类型管理-获取字典选择框列表', 'SysDictTypeController', 'optionselect', '字典类型管理', '/system/dict/type/optionselect', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867780, 'campus', 'campus.category.edit', '修改分类', 'CategoryController', 'edit', '分类管理', '/admin/category', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867781, 'oddfar', 'oddfar.sys_login.get_routers', '获取路由信息', 'SysLoginController', 'getRouters', '登录路由', '/getRouters', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867782, 'message', 'message.message.delete_message', '删除消息', 'MessageController', 'deleteMessage', '消息api', '/message/deleteMessage', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867783, 'oddfar', 'oddfar.sys_menu.tree_select', '菜单管理-获取菜单下拉树列表', 'SysMenuController', 'treeSelect', '菜单管理', '/system/menu/treeselect', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867784, 'campus', 'campus.user_action.image_upload', '图片文件上传', 'UserActionController', 'imageUpload', '用户操作api', '/campus/imageUpload', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948801867785, 'oddfar', 'oddfar.sys_role.remove', 'remove', 'SysRoleController', 'remove', '角色管理', '/system/role/{roleIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976642, 'oddfar', 'oddfar.sys_menu.role_menu_treeselect', '菜单管理-加载对应角色菜单列表树', 'SysMenuController', 'roleMenuTreeselect', '菜单管理', '/system/menu/roleMenuTreeselect/{roleId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976643, 'oddfar', 'oddfar.sys_profile.update_profile', 'updateProfile', 'SysProfileController', 'updateProfile', '个人信息管理', '/system/user/profile/个人信息管理-修改', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976644, 'campus', 'campus.user_account.send_reset_pwd_code', 'sendResetPwdCode', 'UserAccountController', 'sendResetPwdCode', '用户账户操作api', '/campus/pwd-code', 'post', 1, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976645, 'oddfar', 'oddfar.sys_role.add', 'add', 'SysRoleController', 'add', '角色管理', '/system/role', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976646, 'campus', 'campus.comment_info.to_comment', '添加评论', 'CommentInfoController', 'toComment', '评论api', '/campus/toComment', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976647, 'relation', 'relation.relation_info.cancel_block', '取消拉黑', 'RelationInfoController', 'cancelBlock', '关系api', '/relation/cancelBlock/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976648, 'oddfar', 'oddfar.sys_login.login', '登录方法', 'SysLoginController', 'login', '登录路由', '/login', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976649, 'relation', 'relation.relation_info.get_block_list', '查询黑名单', 'RelationInfoController', 'getBlockList', '关系api', '/relation/blockList', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976650, 'oddfar', 'oddfar.sys_role.get_info', 'getInfo', 'SysRoleController', 'getInfo', '角色管理', '/system/role/{roleId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976651, 'message', 'message.message.send_message', '发送消息', 'MessageController', 'sendMessage', '消息api', '/message/sendMessage', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976652, 'oddfar', 'oddfar.sys_user.auth_role', 'authRole', 'SysUserController', 'authRole', '用户管理', '/system/user/authRole/{userId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976653, 'oddfar', 'oddfar.sys_config.edit', '参数配置管理-修改', 'SysConfigController', 'edit', '参数配置管理', '/system/config', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976654, 'oddfar', 'oddfar.sys_menu.edit', '菜单管理-修改', 'SysMenuController', 'edit', '菜单管理', '/system/menu', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976655, 'relation', 'relation.relation_info.cancel_special_follow', '取消特别关注', 'RelationInfoController', 'cancelSpecialFollow', '关系api', '/relation/cancelSpecialFollow/{receiverID}', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976656, 'campus', 'campus.content.page', '分页', 'ContentController', 'page', '内容管理', '/admin/content/list', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976657, 'oddfar', 'oddfar.sys_user.insert_auth_role', 'insertAuthRole', 'SysUserController', 'insertAuthRole', '用户管理', '/system/user/authRole', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976658, 'oddfar', 'oddfar.sys_logininfor.list', '登录日志-分类列表', 'SysLogininforController', 'list', '登录日志管理', '/monitor/logininfor/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976659, 'oddfar', 'oddfar.sys_config.refresh_cache', '参数配置管理-刷新缓存', 'SysConfigController', 'refreshCache', '参数配置管理', '/system/config/refreshCache', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976660, 'oddfar', 'oddfar.sys_role.cancel_auth_user_all', 'cancelAuthUserAll', 'SysRoleController', 'cancelAuthUserAll', '角色管理', '/system/role/authUser/cancelAll', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976661, 'relation', 'relation.relation_info.get_special_follow_list', '查询特别关注列表', 'RelationInfoController', 'getSpecialFollowList', '关系api', '/relation/specialFollowList', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976662, 'oddfar', 'oddfar.sys_operlog.clean', '操作日志-清空', 'SysOperlogController', 'clean', '操作日志管理', '/monitor/operlog/clean', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976663, 'oddfar', 'oddfar.sys_dict_type.get_info', '字典类型管理-查询', 'SysDictTypeController', 'getInfo', '字典类型管理', '/system/dict/type/{dictId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976664, 'oddfar', 'oddfar.sys_user.update', 'update', 'SysUserController', 'update', '用户管理', '/system/user', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976665, 'oddfar', 'oddfar.sys_api_resource.edit_role_resource', '修改对应角色api资源', 'SysApiResourceController', 'editRoleResource', '资源管理', '/system/resource/roleApi', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976666, 'oddfar', 'oddfar.sys_role.unallocated_list', 'unallocatedList', 'SysRoleController', 'unallocatedList', '角色管理', '/system/role/authUser/unallocatedList', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976667, 'oddfar', 'oddfar.sys_logininfor.clean', '登录日志-清空', 'SysLogininforController', 'clean', '登录日志管理', '/monitor/logininfor/clean', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976668, 'campus', 'campus.campus_info.category_list', '查询分类列表', 'CampusInfoController', 'categoryList', '校园墙信息api', '/campus/categoryList', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976669, 'campus', 'campus.content_info.del_content', '删除自己的校园墙', 'ContentInfoController', 'delContent', '信息墙api', '/campus/delContent/{contentId}', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976670, 'oddfar', 'oddfar.sys_role.change_status', 'changeStatus', 'SysRoleController', 'changeStatus', '角色管理', '/system/role/changeStatus', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948868976671, 'message', 'message.chatroom.get_members', '获取聊天室成员', 'ChatroomController', 'getMembers', '聊天室api', '/chatroom/getMembers', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891201, 'oddfar', 'oddfar.sys_logininfor.remove', '登录日志-删除', 'SysLogininforController', 'remove', '登录日志管理', '/monitor/logininfor/{infoIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891202, 'campus', 'campus.tag.add', 'add', 'TagController', 'add', '标签管理', '/admin/tag', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891203, 'campus', 'campus.comment_info.get_comment', '添加评论', 'CommentInfoController', 'getComment', '评论api', '/campus/getComment', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891204, 'oddfar', 'oddfar.sys_dict_data.remove', '字典数据管理-删除', 'SysDictDataController', 'remove', '字典数据管理', '/system/dict/data/{dictCodes}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891205, 'campus', 'campus.content_info.get_content_by_id', '查询信息墙详细内容', 'ContentInfoController', 'getContentById', '信息墙api', '/campus/getContent', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891206, 'oddfar', 'oddfar.sys_dict_data.get_info', '字典数据管理-查询', 'SysDictDataController', 'getInfo', '字典数据管理', '/system/dict/data/{dictCode}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891207, 'campus', 'campus.content_info.get_own_love_content', '查询点赞的信息墙列表', 'ContentInfoController', 'getOwnLoveContent', '信息墙api', '/campus/getOwnLoveContent', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891208, 'campus', 'campus.comment.add', 'add', 'CommentController', 'add', '评论管理', '/admin/comment', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891209, 'campus', 'campus.tag.list', 'list', 'TagController', 'list', '标签管理', '/admin/tag/list', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891210, 'message', 'message.message.update_message', '修改消息', 'MessageController', 'updateMessage', '消息api', '/message/updateMessage', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891211, 'oddfar', 'oddfar.sys_login.get_info', '获取用户信息', 'SysLoginController', 'getInfo', '登录路由', '/getInfo', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891212, 'campus', 'campus.content.get_info', '获取校园墙内容', 'ContentController', 'getInfo', '内容管理', '/admin/content/{contentId}', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891213, 'oddfar', 'oddfar.sys_user.reset_pwd', 'resetPwd', 'SysUserController', 'resetPwd', '用户管理', '/system/user/resetPwd', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891214, 'oddfar', 'oddfar.sys_menu.get_info', '菜单管理-查询', 'SysMenuController', 'getInfo', '菜单管理', '/system/menu/{menuId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891215, 'oddfar', 'oddfar.sys_role.cancel_auth_user', 'cancelAuthUser', 'SysRoleController', 'cancelAuthUser', '角色管理', '/system/role/authUser/cancel', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891216, 'oddfar', 'oddfar.sys_menu.remove', '菜单管理-删除', 'SysMenuController', 'remove', '菜单管理', '/system/menu/{menuId}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891217, 'oddfar', 'oddfar.sys_role.list', 'list', 'SysRoleController', 'list', '角色管理', '/system/role/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891218, 'oddfar', 'oddfar.sys_dict_type.refresh_cache', '字典类型管理-刷新', 'SysDictTypeController', 'refreshCache', '字典类型管理', '/system/dict/type/refreshCache', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891219, 'oddfar', 'oddfar.sys_menu.add', '菜单管理-新增', 'SysMenuController', 'add', '菜单管理', '/system/menu', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891220, 'oddfar', 'oddfar.sys_user.page', 'page', 'SysUserController', 'page', '用户管理', '/system/user/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891221, 'oddfar', 'oddfar.sys_role.allocated_list', 'allocatedList', 'SysRoleController', 'allocatedList', '角色管理', '/system/role/authUser/allocatedList', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891222, 'relation', 'relation.relation_info.special_follow', '特别关注', 'RelationInfoController', 'specialFollow', '关系api', '/relation/specialFollow/{receiverID}', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891223, 'campus', 'campus.tag.remove', 'remove', 'TagController', 'remove', '标签管理', '/admin/tag/{tagIds}', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891224, 'oddfar', 'oddfar.sys_dict_data.edit', '字典数据管理-修改', 'SysDictDataController', 'edit', '字典数据管理', '/system/dict/data', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891225, 'campus', 'campus.category.remove', '删除分类', 'CategoryController', 'remove', '分类管理', '/admin/category/{categoryId}', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891226, 'campus', 'campus.user_account.send_mail', 'sendMail', 'UserAccountController', 'sendMail', '用户账户操作api', '/campus/bindMail', 'post', 1, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891227, 'oddfar', 'oddfar.sys_operlog.list', '操作日志-分页', 'SysOperlogController', 'list', '操作日志管理', '/monitor/operlog/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891228, 'campus', 'campus.category.add', '新增分类', 'CategoryController', 'add', '分类管理', '/admin/category', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891229, 'oddfar', 'oddfar.sys_role.select_auth_user_all', 'selectAuthUserAll', 'SysRoleController', 'selectAuthUserAll', '角色管理', '/system/role/authUser/selectAll', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891230, 'oddfar', 'oddfar.sys_config.add', '参数配置管理-新增', 'SysConfigController', 'add', '参数配置管理', '/system/config', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891231, 'oddfar', 'oddfar.sys_dict_type.remove', '字典类型管理-删除', 'SysDictTypeController', 'remove', '字典类型管理', '/system/dict/type/{dictIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891232, 'campus', 'campus.comment_info.get_comment_children_list', '查询一级评论的子评论', 'CommentInfoController', 'getCommentChildrenList', '评论api', '/campus/getCommentChildrenList', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891233, 'campus', 'campus.content_info.update_content', '修改信息墙', 'ContentInfoController', 'updateContent', '信息墙api', '/campus/updateContent', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891234, 'campus', 'campus.content.remove', 'remove', 'ContentController', 'remove', '内容管理', '/admin/content/{contentIds}', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891235, 'oddfar', 'oddfar.sys_config.get_info', '参数配置管理-查询id信息', 'SysConfigController', 'getInfo', '参数配置管理', '/system/config/{id}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891236, 'relation', 'relation.relation_info.cancel_follow', '取消关注', 'RelationInfoController', 'cancelFollow', '关系api', '/relation/cancelFollow/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891237, 'oddfar', 'oddfar.sys_config.remove', '参数配置管理-删除', 'SysConfigController', 'remove', '参数配置管理', '/system/config/{configIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891238, 'campus', 'campus.comment_info.get_own_comment_list', '分页查询自己发布或回复的评论列表', 'CommentInfoController', 'getOwnCommentList', '评论api', '/campus/getOwnComment', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948931891239, 'message', 'message.chatroom.get_chatroom', '获取用户所在的聊天室列表', 'ChatroomController', 'getChatroom', '聊天室api', '/chatroom/getChatroom', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805762, 'campus', 'campus.content.edit', '修改信息墙内容', 'ContentController', 'edit', '内容管理', '/admin/content/', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805763, 'oddfar', 'oddfar.sys_dict_data.add', '字典数据管理-新增', 'SysDictDataController', 'add', '字典数据管理', '/system/dict/data', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805764, 'campus', 'campus.content_info.own_contents', '查看自己的单个信息墙', 'ContentInfoController', 'ownContents', '信息墙api', '/campus/ownContents', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805765, 'oddfar', 'oddfar.sys_dict_data.dict_type', '字典数据管理-根据字典类型查询字典数据信息', 'SysDictDataController', 'dictType', '字典数据管理', '/system/dict/data/type/{dictType}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805766, 'campus', 'campus.category.list', '查询分类列表', 'CategoryController', 'list', '分类管理', '/admin/category/list', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805767, 'oddfar', 'oddfar.sys_config.get_config_key', 'getConfigKey', 'SysConfigController', 'getConfigKey', '参数配置管理', '/system/config/configKey/{configKey:.+}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805768, 'oddfar', 'oddfar.sys_profile.avatar', '个人信息管理-头像上次', 'SysProfileController', 'avatar', '个人信息管理', '/system/user/profile/avatar', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:10', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805769, 'oddfar', 'oddfar.sys_user.get_info', 'getInfo', 'SysUserController', 'getInfo', '用户管理', '/system/user/{userId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805770, 'message', 'message.message.get_message_by_ID', '获取指定聊天室消息', 'MessageController', 'getMessageByID', '消息api', '/message/getMessage', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805771, 'campus', 'campus.comment.edit', 'edit', 'CommentController', 'edit', '评论管理', '/admin/comment', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805772, 'campus', 'campus.comment_info.get_one_level_comment', '查询一级评论', 'CommentInfoController', 'getOneLevelComment', '评论api', '/campus/getOneLevelComment', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805773, 'campus', 'campus.user_account.change_pwd', 'changePwd', 'UserAccountController', 'changePwd', '用户账户操作api', '/campus/changePwd', 'post', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805774, 'oddfar', 'oddfar.sys_config.page', '参数配置管理-分页', 'SysConfigController', 'page', '参数配置管理', '/system/config/page', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805775, 'campus', 'campus.comment_info.get_comment_children', '分页查询一级评论的子评论', 'CommentInfoController', 'getCommentChildren', '评论api', '/campus/getCommentChildren', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805776, 'campus', 'campus.comment_info.del_own_comment', '删除自己的评论', 'CommentInfoController', 'delOwnComment', '评论api', '/campus/delOwnComment', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805777, 'oddfar', 'oddfar.sys_menu.list', '菜单管理-分页', 'SysMenuController', 'list', '菜单管理', '/system/menu/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805778, 'campus', 'campus.content_info.get_content_by_condition', '条件查询信息墙', 'ContentInfoController', 'getContentByCondition', '信息墙api', '/campus/getContentByCondition', 'post', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805779, 'campus', 'campus.user_action.zan_content', '点赞', 'UserActionController', 'zanContent', '用户操作api', '/campus/zan/{contentId}', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805780, 'message', 'message.chatroom.create_chat_room', '创建聊天室', 'ChatroomController', 'createChatRoom', '聊天室api', '/chatroom/createChatroom', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805781, 'relation', 'relation.relation_info.block', '拉黑', 'RelationInfoController', 'block', '关系api', '/relation/block/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805782, 'oddfar', 'oddfar.sys_dict_type.list', '字典类型管理-分页', 'SysDictTypeController', 'list', '字典类型管理', '/system/dict/type/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805783, 'campus', 'campus.content_info.get_content_list', '查询信息墙内容列表', 'ContentInfoController', 'getContentList', '信息墙api', '/campus/contentList', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805784, 'oddfar', 'oddfar.sys_profile.update_pwd', '个人信息管理-重置密码', 'SysProfileController', 'updatePwd', '个人信息管理', '/system/user/profile/updatePwd', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805785, 'oddfar', 'oddfar.sys_user.remove', 'remove', 'SysUserController', 'remove', '用户管理', '/system/user/{userIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805786, 'campus', 'campus.user_account.email_validate', 'emailValidate', 'UserAccountController', 'emailValidate', '用户账户操作api', '/campus/email-validate', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805787, 'campus', 'campus.user_account.have_mail', 'haveMail', 'UserAccountController', 'haveMail', '用户账户操作api', '/campus/haveMail', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805788, 'campus', 'campus.content_info.to_content', '发表信息墙', 'ContentInfoController', 'toContent', '信息墙api', '/campus/sendContent', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805789, 'campus', 'campus.content_info.get_simple_hot_content', '查询信息墙内容列表', 'ContentInfoController', 'getSimpleHotContent', '信息墙api', '/campus/simpleHotContent', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805790, 'oddfar', 'oddfar.sys_user.add', 'add', 'SysUserController', 'add', '用户管理', '/system/user', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805791, 'campus', 'campus.category.list_select', '查询分类列表选择器', 'CategoryController', 'listSelect', '分类管理', '/admin/category/listSelect', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805792, 'message', 'message.chatroom.remove_chatroom', '删除聊天室', 'ChatroomController', 'removeChatroom', '聊天室api', '/chatroom/removeChatroom', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805793, 'campus', 'campus.user_action.video_upload', '视频文件上传', 'UserActionController', 'videoUpload', '用户操作api', '/campus/videoUpload', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805794, 'oddfar', 'oddfar.sys_user.change_status', 'changeStatus', 'SysUserController', 'changeStatus', '用户管理', '/system/user/changeStatus', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805795, 'oddfar', 'oddfar.sys_dict_data.page', '字典数据管理-分页', 'SysDictDataController', 'page', '字典数据管理', '/system/dict/data/list', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805796, 'campus', 'campus.campus_info.category_children', '查询分类子列表', 'CampusInfoController', 'categoryChildren', '校园墙信息api', '/campus/categoryChildren/{categoryId}', 'get', 1, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805797, 'campus', 'campus.category.get_info', '获取分类详细信息', 'CategoryController', 'getInfo', '分类管理', '/admin/category/{categoryId}', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805798, 'relation', 'relation.relation_info.follow', '关注', 'RelationInfoController', 'follow', '关系api', '/relation/follow/{receiverID}', 'post', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805799, 'oddfar', 'oddfar.sys_operlog.remove', '操作日志-删除', 'SysOperlogController', 'remove', '操作日志管理', '/monitor/operlog/{operIds}', 'delete', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805800, 'campus', 'campus.comment.get_info', 'getInfo', 'CommentController', 'getInfo', '评论管理', '/admin/comment/{commentId}', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805801, 'oddfar', 'oddfar.sys_api_resource.role_menu_tree_select', '资源管理-加载对应角色资源列表树', 'SysApiResourceController', 'roleMenuTreeSelect', '资源管理', '/system/resource/roleApiTreeselect/{roleId}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805802, 'oddfar', 'oddfar.sys_profile.profile', '个人信息管理-查询', 'SysProfileController', 'profile', '个人信息管理', '/system/user/profile', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805803, 'oddfar', 'oddfar.sys_logininfor.unlock', '登录日志-解锁', 'SysLogininforController', 'unlock', '登录日志管理', '/monitor/logininfor/unlock/{userName}', 'get', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805804, 'oddfar', 'oddfar.sys_dict_type.add', '字典类型管理-新增', 'SysDictTypeController', 'add', '字典类型管理', '/system/dict/type', 'post', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805805, 'campus', 'campus.tag.get_info', 'getInfo', 'TagController', 'getInfo', '标签管理', '/admin/tag/{tagId}', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805806, 'campus', 'campus.tag.edit', 'edit', 'TagController', 'edit', '标签管理', '/admin/tag', 'put', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805807, 'relation', 'relation.relation_info.get_follow_list', '查询关注列表', 'RelationInfoController', 'getFollowList', '关系api', '/relation/followList', 'get', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805808, 'campus', 'campus.comment.remove', 'remove', 'CommentController', 'remove', '评论管理', '/admin/comment/{commentIds}', 'delete', 1, 'Y', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
+INSERT INTO `sys_resource` VALUES (1740277948994805809, 'oddfar', 'oddfar.sys_role.edit', 'edit', 'SysRoleController', 'edit', '角色管理', '/system/role', 'put', 2, 'N', b'0', NULL, '2023-12-28 15:46:11', NULL, '2023-12-28 15:46:10');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -1027,7 +1034,7 @@ CREATE TABLE `sys_role`  (
   `update_user` bigint NULL DEFAULT NULL COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1628997651572027394 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色信息表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1628997651572027395 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role
@@ -1096,9 +1103,11 @@ CREATE TABLE `sys_role_resource`  (
 -- ----------------------------
 INSERT INTO `sys_role_resource` VALUES ('campus.content.get_info', 2);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.del_content', 2);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_content_list', 2);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_own_love_content', 2);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.own_contents', 2);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.to_content', 2);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.update_content', 2);
 INSERT INTO `sys_role_resource` VALUES ('relation.relation_info.block', 2);
 INSERT INTO `sys_role_resource` VALUES ('relation.relation_info.cancel_block', 2);
 INSERT INTO `sys_role_resource` VALUES ('relation.relation_info.cancel_follow', 2);
@@ -1111,9 +1120,11 @@ INSERT INTO `sys_role_resource` VALUES ('relation.relation_info.special_follow',
 INSERT INTO `sys_role_resource` VALUES ('campus.comment_info.get_own_comment_list', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.comment_info.to_comment', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.del_content', 1594285449147330561);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_content_list', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_own_love_content', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.own_contents', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.to_content', 1594285449147330561);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.update_content', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.user_action.image_upload', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.user_action.video_upload', 1594285449147330561);
 INSERT INTO `sys_role_resource` VALUES ('campus.user_action.zan_content', 1594285449147330561);
@@ -1137,11 +1148,13 @@ INSERT INTO `sys_role_resource` VALUES ('campus.content.get_info', 1628997165540
 INSERT INTO `sys_role_resource` VALUES ('campus.content.page', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('campus.content.remove', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.del_content', 1628997165540274178);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_content_list', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_own_love_content', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.own_contents', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.to_content', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.update_content', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('message.chatroom.create_chat_room', 1628997165540274178);
+INSERT INTO `sys_role_resource` VALUES ('message.chatroom.get_chatroom', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('message.chatroom.get_members', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('message.chatroom.remove_chatroom', 1628997165540274178);
 INSERT INTO `sys_role_resource` VALUES ('message.message.delete_message', 1628997165540274178);
@@ -1165,8 +1178,11 @@ INSERT INTO `sys_role_resource` VALUES ('campus.content.get_info', 1628997651572
 INSERT INTO `sys_role_resource` VALUES ('campus.content.page', 1628997651572027394);
 INSERT INTO `sys_role_resource` VALUES ('campus.content.remove', 1628997651572027394);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.del_content', 1628997651572027394);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_content_list', 1628997651572027394);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.get_own_love_content', 1628997651572027394);
 INSERT INTO `sys_role_resource` VALUES ('campus.content_info.own_contents', 1628997651572027394);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.to_content', 1628997651572027394);
+INSERT INTO `sys_role_resource` VALUES ('campus.content_info.update_content', 1628997651572027394);
 INSERT INTO `sys_role_resource` VALUES ('campus.user_action.zan_content', 1628997651572027394);
 
 -- ----------------------------
@@ -1200,9 +1216,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', 'admin', '00', 'oddfar@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '127.0.0.1', '2023-12-27 21:55:06', '管理员', '我是管理员', '北京大学', 0, '2022-10-05 15:28:43', 1, '2023-12-27 21:55:06', b'0');
+INSERT INTO `sys_user` VALUES (1, 'admin', 'admin', '00', 'oddfar@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '127.0.0.1', '2023-12-28 13:53:47', '管理员', '我是管理员', '北京大学', 0, '2022-10-05 15:28:43', 1, '2023-12-28 13:53:47', b'0');
 INSERT INTO `sys_user` VALUES (2, 'zhiyuan', '致远', '00', 'a_zhiyuan@163.com', '15666666666', '1', '', '$2a$10$LtM4R7ovl31aBeT8yLrb.uoMFjU4TisUHHSZk4/PsLVkkyZT.Fgf.', '0', '127.0.0.1', '2023-01-11 23:04:36', '测试', '我是致远', '清华大学', 0, '2022-10-05 15:28:43', 2, '2023-01-11 23:04:36', b'0');
-INSERT INTO `sys_user` VALUES (1594285543804383234, 'test', '测试账号', '00', '123123@163.com', '', '0', 'https://img0.baidu.com/it/u=1183896628,1403534286&fm=253&fmt=auto&app=138&f=PNG', '$2a$10$jEsSgqNclOA.0Vj4xuKIdeXLC0D9trS1aAoZBLA6e/Z7JSDmU67HW', '0', '127.0.0.1', '2023-12-27 22:16:40', '测试', '我是KD', '中国科学技术大学', 1, '2022-11-20 19:04:29', 1594285543804383234, '2023-12-27 22:16:40', b'0');
+INSERT INTO `sys_user` VALUES (1594285543804383234, 'test', '测试账号', '00', '123123@163.com', '', '0', 'https://img0.baidu.com/it/u=1183896628,1403534286&fm=253&fmt=auto&app=138&f=PNG', '$2a$10$jEsSgqNclOA.0Vj4xuKIdeXLC0D9trS1aAoZBLA6e/Z7JSDmU67HW', '0', '127.0.0.1', '2023-12-28 15:18:10', '测试', '我是KD', '中国科学技术大学', 1, '2022-11-20 19:04:29', 1594285543804383234, '2023-12-28 15:18:10', b'0');
 INSERT INTO `sys_user` VALUES (1737940657664077826, '123123', '123123', '00', '123123@163.com', '', '0', '', '$2a$10$T8nMS5L8tLUYaAKJCDqe2ei98zM2L6L3SQHA42o/toOL3BaLe3Tmu', '0', '127.0.0.1', '2023-12-22 05:18:06', NULL, '我是百味', '重庆大学', NULL, '2023-12-22 04:58:37', 1737940657664077826, '2023-12-22 05:18:06', b'0');
 INSERT INTO `sys_user` VALUES (1737940657664077827, 'test1', '用户1', '00', '123123@163.com', '', '0', '', '$2a$10$jEsSgqNclOA.0Vj4xuKIdeXLC0D9trS1aAoZBLA6e/Z7JSDmU67HW', '0', '', NULL, NULL, '我是LBJ', '重庆大学', NULL, NULL, NULL, NULL, b'0');
 INSERT INTO `sys_user` VALUES (1737940657664077828, 'test2', '用户2', '00', '123123@163.com', '', '0', '', '$2a$10$jEsSgqNclOA.0Vj4xuKIdeXLC0D9trS1aAoZBLA6e/Z7JSDmU67HW', '0', '', NULL, NULL, '我是用户2', '中国科学技术大学', NULL, NULL, NULL, NULL, b'0');

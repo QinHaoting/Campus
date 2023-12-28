@@ -20,9 +20,6 @@ public interface ChatroomService extends IService<ChatroomEntity> {
      */
     int createChatroom(List<Long> userIds);
 
-
-
-
     /**
      * 删除聊天室
      * @param chatroomId 聊天室ID

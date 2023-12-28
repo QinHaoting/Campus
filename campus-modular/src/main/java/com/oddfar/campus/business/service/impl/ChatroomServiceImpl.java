@@ -45,11 +45,29 @@ public class ChatroomServiceImpl extends ServiceImpl<ChatroomMapper, ChatroomEnt
         }
         if (userIdMap.get(ownerId) == null) { // 群主也是群成员
             userIdMap.put(ownerId, datetime);
+            userIds.add(ownerId);
         }
         ChatroomEntity chatroom = new ChatroomEntity();
         chatroom.setOwnerId(ownerId);
         chatroom.setUserIds(JSON.toJSONString(userIdMap)); // 以字符串存入
         chatroom.setCreateTime(datetime);
+
+        // 设置群名称，默认为群成员的用户小名
+        List<SysUserEntity> users = userMapper.selectBatchIds(userIds); // 群成员列表
+        StringBuffer chatroomName = new StringBuffer();
+        for (SysUserEntity user: users) {
+            if(user.getNickName() == null) { // 用户小名为空，则用空格代替
+                chatroomName.append(" ").append("、");
+                continue;
+            }
+            if (user.getUserId().equals(userIds.get(userIds.size()-1))) { // 最后一个用户
+                chatroomName.append(user.getNickName());
+            }
+            else {
+                chatroomName.append(user.getNickName()).append("、");
+            }
+        }
+        chatroom.setName(new String(chatroomName));
 
         return chatroomMapper.insert(chatroom);
     }

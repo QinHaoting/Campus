@@ -35,8 +35,6 @@ public class MessageController {
     @PreAuthorize("@ss.resourceAuth()")
     @PostMapping(value = "/sendMessage", name = "发送消息")
     public R sendMessage(@RequestBody MessageEntity message) {
-        Long currentUserId = SecurityUtils.getUserId();
-        message.setSenderId(currentUserId);
         int flag = messageService.sendMessage(message);
         switch (flag) {
             case -1: return R.error("聊天室不存在");

@@ -17,6 +17,7 @@ import com.oddfar.campus.common.core.page.PageUtils;
 import com.oddfar.campus.common.domain.PageResult;
 import com.oddfar.campus.common.domain.entity.SysUserEntity;
 import com.oddfar.campus.common.utils.DateUtils;
+import com.oddfar.campus.common.utils.SecurityUtils;
 import com.oddfar.campus.framework.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,9 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageEntity
     @Resource
     private ChatroomMapper chatroomMapper;
 
+    @Resource
+    private SysUserMapper userMapper;
+
 
     @Override
     public int sendMessage(MessageEntity message) {
@@ -53,6 +57,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageEntity
             return -1;
         }
         else {
+            Long currentUserId = SecurityUtils.getUserId();
+            message.setSenderId(currentUserId);
             message.setCreateTime(DateUtils.getNowDate());
             if (message.getType() == null)
                 message.setType(CampusConstant.MESSAGE_TYPE_TEXT); // 默认为文字类型
@@ -69,7 +75,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageEntity
     public List<MessageEntity> getMessageByChatroomId(Long chatroomId) {
         LambdaQueryWrapperX<MessageEntity> lambdaQueryWrapperX = new LambdaQueryWrapperX<>();
         lambdaQueryWrapperX.eq(MessageEntity::getReceiverId, chatroomId);
-        return messageMapper.selectList(lambdaQueryWrapperX);
+        List<MessageEntity> messages = messageMapper.selectList(lambdaQueryWrapperX);
+        for (MessageEntity message: messages) { // 设置发送者名称
+            message.setSenderName(userMapper.selectById(message.getSenderId()).getNickName());
+        }
+        return messages;
     }
 
 }

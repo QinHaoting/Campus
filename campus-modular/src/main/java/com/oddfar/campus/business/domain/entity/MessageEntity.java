@@ -54,4 +54,9 @@ public class MessageEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    /**
+     * 消息发送者小名
+     */
+    @TableField(exist = false)
+    private String senderName;
 }

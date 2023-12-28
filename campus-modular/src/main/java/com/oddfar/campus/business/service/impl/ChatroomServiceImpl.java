@@ -53,22 +53,25 @@ public class ChatroomServiceImpl extends ServiceImpl<ChatroomMapper, ChatroomEnt
         chatroom.setCreateTime(datetime);
 
         // 设置群名称，默认为群成员的用户小名
-        List<SysUserEntity> users = userMapper.selectBatchIds(userIds); // 群成员列表
         StringBuffer chatroomName = new StringBuffer();
-        for (SysUserEntity user: users) {
-            if(user.getNickName() == null) { // 用户小名为空，则用空格代替
-                chatroomName.append(" ").append("、");
-                continue;
-            }
-            if (user.getUserId().equals(userIds.get(userIds.size()-1))) { // 最后一个用户
+        List<SysUserEntity> users = userMapper.selectBatchIds(userIds); // 群成员列表
+        SysUserEntity user = null;
+        Iterator<SysUserEntity> iterator = users.iterator();
+        while(iterator.hasNext()) {
+            user = iterator.next();
+            if (!iterator.hasNext()) { // 最后一个
                 chatroomName.append(user.getNickName());
             }
             else {
-                chatroomName.append(user.getNickName()).append("、");
+                String userNickName = user.getNickName();
+                if (userNickName == null) { // 用户小名为空，则用空格代替
+                    userNickName = " ";
+                }
+                chatroomName.append(userNickName).append("、");
             }
         }
-        chatroom.setName(new String(chatroomName));
 
+        chatroom.setName(new String(chatroomName));
         return chatroomMapper.insert(chatroom);
     }
 

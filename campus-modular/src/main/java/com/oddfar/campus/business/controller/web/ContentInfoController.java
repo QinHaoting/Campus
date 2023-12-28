@@ -38,7 +38,7 @@ public class ContentInfoController {
      * @param contentQueryVo 查询参数
      * @return
      */
-    @Anonymous
+    @PreAuthorize("@ss.resourceAuth()")
     @GetMapping(value = "/contentList", name = "查询信息墙内容列表")
     public R getContentList(ContentQueryVo contentQueryVo) {
         //最新墙 热门墙等等。。。

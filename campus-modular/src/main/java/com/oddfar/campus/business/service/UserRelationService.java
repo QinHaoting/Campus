@@ -106,4 +106,11 @@ public interface UserRelationService extends IService<UserRelationEntity> {
      * @return 真拉黑
      */
     boolean isBlock(Long senderId, Long receiverId);
+
+    /**
+     * 获取非拉黑者名单
+     * @param userID 用户ID
+     * @return 该用户的非拉黑者名单
+     */
+    PageResult<SysUserEntity> getUnBlockList(Long userID);
 }

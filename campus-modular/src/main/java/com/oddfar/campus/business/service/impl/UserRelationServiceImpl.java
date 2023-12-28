@@ -15,8 +15,8 @@ import com.oddfar.campus.framework.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -182,7 +182,7 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         // 获取总关注数
         long total = new PageInfo(receiverIDs).getTotal();
 
-        // TODO 隐藏信息
+        // 隐藏信息
         List<SysUserEntity> users = userMapper.selectBatchIds(receiverIDs);
         hideUserInfo(users);
         return new PageResult<>(users, total);
@@ -198,10 +198,10 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         // 开始分页
         PageUtils.startPage(WEB_PAGE_SIZE);
         List<Long> receiverIDs = userRelationMapper.getBlockList(userId); // 被关注用户列表ID
-        // 获取总关注数
+        // 获取总拉黑数
         long total = new PageInfo(receiverIDs).getTotal();
 
-        // TODO 隐藏信息
+        // 隐藏信息
         List<SysUserEntity> users = userMapper.selectBatchIds(receiverIDs);
         hideUserInfo(users);
         return new PageResult<>(users, total);
@@ -222,6 +222,47 @@ public class UserRelationServiceImpl extends ServiceImpl<UserRelationMapper, Use
         return false;
     }
 
+    /**
+     * 获取指定用户的非拉黑者名单
+     * @param userID 用户ID
+     * @return 指定用户的非拉黑者名单
+     */
+    @Override
+    public PageResult<SysUserEntity> getUnBlockList(Long userID) {
+        List<Long> blockList = userRelationMapper.getBlockList(userID);
+        // 当前用户拉黑的
+        LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX_CurrentBlock = new LambdaQueryWrapperX<>();
+        lambdaQueryWrapperX_CurrentBlock.eq(UserRelationEntity::getSenderId, userID); // 当前用户拉黑
+        lambdaQueryWrapperX_CurrentBlock.eq(UserRelationEntity::getType, CampusConstant.RELATION_BLOCK);
+        List<UserRelationEntity> currentBlockList = userRelationMapper.selectList(lambdaQueryWrapperX_CurrentBlock);
+        List<Long> currentBlockUserIdList = currentBlockList.stream().map(UserRelationEntity::getReceiverId).collect(Collectors.toList());
+        // 拉黑当前用户的
+        LambdaQueryWrapperX<UserRelationEntity> lambdaQueryWrapperX_BlockCurrent = new LambdaQueryWrapperX<>();
+        lambdaQueryWrapperX_BlockCurrent.eq(UserRelationEntity::getReceiverId, userID); // 当前用户拉黑
+        lambdaQueryWrapperX_BlockCurrent.eq(UserRelationEntity::getType, CampusConstant.RELATION_BLOCK);
+        List<UserRelationEntity> blockCurrentList = userRelationMapper.selectList(lambdaQueryWrapperX_CurrentBlock);
+        List<Long> blockCurrentUserIdList = currentBlockList.stream().map(UserRelationEntity::getReceiverId).collect(Collectors.toList());
+
+        blockCurrentUserIdList.addAll(currentBlockUserIdList); // 所有不可见的用户ID列表
+        Set<Long> blockUserIdList = new HashSet<Long>(blockCurrentUserIdList); // 去重
+
+        List<SysUserEntity> userEntityList = userMapper.selectList(); // 所有用户
+        List<Long> userIdList = userEntityList.stream().map(SysUserEntity::getUserId).collect(Collectors.toList()); // 所有用户ID
+        for (Long blockUserId: blockUserIdList) {
+            userIdList.remove(blockUserId);
+        }
+        // 获取总人数
+        long total = new PageInfo(userIdList).getTotal();
+        // 隐藏信息
+        List<SysUserEntity> users = userMapper.selectBatchIds(userIdList);
+        hideUserInfo(users);
+        return new PageResult<>(users, total);
+    }
+
+    /**
+     * 隐藏用户信息
+     * @param users 待隐藏用户列表
+     */
     static void hideUserInfo(List<SysUserEntity> users) {
         for (SysUserEntity user: users) {
             user.setPassword(null);

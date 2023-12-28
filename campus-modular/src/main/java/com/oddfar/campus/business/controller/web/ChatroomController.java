@@ -50,7 +50,8 @@ public class ChatroomController {
     @PreAuthorize("@ss.resourceAuth()")
     @GetMapping(value = "/getMembers", name = "获取聊天室成员")
     public R getMembers(Long id) {
-        int flag = chatroomService.isMember(id);
+        Long currentUserId = SecurityUtils.getUserId();
+        int flag = chatroomService.isMember(id, currentUserId);
         switch (flag) {
             case -1: return R.error("聊天室不存在");
             case 0: return R.error("你不是该聊天室成员");
@@ -88,5 +89,33 @@ public class ChatroomController {
     public R getChatroom() {
         List<ChatroomEntity> chatroomList = chatroomService.getChatroomList(); // 当前用户所在聊天室列表
         return R.ok().setData(chatroomList);
+    }
+
+    /**
+     * 移除聊天室用户
+     * @param chatroomId 聊天室ID
+     * @param userId 用户ID
+     * @return 是否移除成功
+     */
+    @PreAuthorize("@ss.resourceAuth()")
+    @PutMapping(value = "/removeMembers", name = "删除聊天室用户")
+    public R removeMembers(Long chatroomId, Long userId) {
+        int flagChatroom = chatroomService.isOwner(chatroomId);
+        switch (flagChatroom) {
+            case -1: return R.error("聊天室不存在");
+            case 0: return R.error("你不是该聊天室群主");
+            default: { // 当前用户是聊天室群主
+                int flagIsMember = chatroomService.isMember(chatroomId, userId); // 判断用户是否在群内
+                switch (flagIsMember) {
+                    case 0: return R.error("该用户不是该聊天室成员");
+                    default: { // 该用户是该聊天室成员
+                       int flag = chatroomService.removeMember(chatroomId, userId);
+
+                       // TODO
+                       return R.ok();
+                    }
+                }
+            }
+        }
     }
 }

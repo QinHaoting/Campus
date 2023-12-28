@@ -173,4 +173,17 @@ public class RelationInfoController {
         PageResult<SysUserEntity> blockList = userRelationService.getBlockList(userID);
         return R.ok().put("blockList", blockList);
     }
+
+    /**
+     * 查询非拉黑人员名单
+     * @return 非拉黑者名单
+     */
+    @PreAuthorize("@ss.resourceAuth()")
+    @GetMapping(value = "/unBlockList", name = "查询非拉黑者名单")
+    public R getUnBlockList() {
+        //获取关注列表
+        Long userID = SecurityUtils.getUserId();
+        PageResult<SysUserEntity> unBlockList = userRelationService.getUnBlockList(userID);
+        return R.ok().put("unBlockList", unBlockList);
+    }
 }

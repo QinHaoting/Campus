@@ -51,7 +51,8 @@ public class MessageController {
     @PreAuthorize("@ss.resourceAuth()")
     @GetMapping(value = "/getMessage", name = "获取指定聊天室消息")
     public R getMessageByID(Long id) {
-        int flag = chatroomService.isMember(id);
+        Long currentUserId = SecurityUtils.getUserId();
+        int flag = chatroomService.isMember(id, currentUserId);
         switch (flag) {
             case -1: return R.error("聊天室不存在");
             case 0: return R.error("你不是聊天室成员");
@@ -68,8 +69,8 @@ public class MessageController {
     @PutMapping(value = "/updateMessage", name = "修改消息")
     public R updateMessage(@RequestBody MessageEntity message) {
         Long chatroomId = message.getReceiverId();
-        System.out.println("message:" + message);
-        int flag = chatroomService.isMember(chatroomId);
+        Long currentUserId = SecurityUtils.getUserId();
+        int flag = chatroomService.isMember(chatroomId, currentUserId);
         switch (flag) {
             case -1: return R.error("聊天室不存在");
             case 0: return R.error("你不是聊天室成员");
@@ -99,7 +100,8 @@ public class MessageController {
             return R.error("消息不存在");
 
         Long chatroomId = message.getReceiverId();
-        int flag = chatroomService.isMember(chatroomId);
+        Long currentUserId = SecurityUtils.getUserId();
+        int flag = chatroomService.isMember(chatroomId, currentUserId);
         switch (flag) {
             case -1: return R.error("聊天室不存在");
             case 0: return R.error("你不是聊天室成员");

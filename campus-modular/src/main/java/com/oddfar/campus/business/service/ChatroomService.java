@@ -35,11 +35,12 @@ public interface ChatroomService extends IService<ChatroomEntity> {
     List<SysUserEntity> getUsers(Long chatroomId);
 
     /**
-     * 判断当前用户是否在聊天室
+     * 判断用户是否在聊天室
      * @param chatroomId 聊天室ID
+     * @param userId 用户ID
      * @return 是否在聊天室
      */
-    int isMember(Long chatroomId);
+    int isMember(Long chatroomId, Long userId);
 
     /**
      * 判断当前用户是否为聊天室群主
@@ -53,4 +54,12 @@ public interface ChatroomService extends IService<ChatroomEntity> {
      * @return 用户所在聊天室
      */
     List<ChatroomEntity> getChatroomList();
+
+    /**
+     * 移除聊天室内的成员
+     * @param chatroomId 聊天室ID
+     * @param userId 成员ID
+     * @return 是否移除成功
+     */
+    int removeMember(Long chatroomId, Long userId);
 }

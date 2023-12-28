@@ -96,20 +96,20 @@ public class ChatroomServiceImpl extends ServiceImpl<ChatroomMapper, ChatroomEnt
     }
 
     /**
-     * 判断当前用户是否是聊天室的成员
+     * 判断指定用户是否是聊天室的成员
      * @param chatroomId 聊天室ID
+     * @param userId 用户ID
      * @return 是否是聊天室成员
      */
     @Override
-    public int isMember(Long chatroomId) {
+    public int isMember(Long chatroomId, Long userId) {
         ChatroomEntity chatroom = chatroomMapper.selectById(chatroomId);
         if (chatroom == null)
             return -1; // 聊天室不存在
         else {
             // json字符串转为HashMap对象
             HashMap<Long, Date> userMap = JSON.parseObject(chatroom.getUserIds(), new TypeReference<HashMap<Long, Date>>() {});
-            Long currentUserId = SecurityUtils.getUserId();
-            if (userMap.get(currentUserId) == null) {
+            if (userMap.get(userId) == null) {
                 return 0; // 当前用户不是该聊天室成员
             }
             return 1; // 当前用户是该聊天室成员
@@ -137,17 +137,34 @@ public class ChatroomServiceImpl extends ServiceImpl<ChatroomMapper, ChatroomEnt
         }
     }
 
+    /**
+     * 获取当前用户所在聊天室
+     * @return 所在所有的聊天室
+     */
     @Override
     public List<ChatroomEntity> getChatroomList() {
         List<ChatroomEntity> chatroomEntityList = chatroomMapper.selectList(null);
         List<ChatroomEntity> userChatroomList = new ArrayList<>();
+        Long currentUserId = SecurityUtils.getUserId();
         for (ChatroomEntity chatroom: chatroomEntityList) {
-            if (isMember(chatroom.getChatroomId()) == 1) { // 当前用户是聊天室成员
+            if (isMember(chatroom.getChatroomId(), currentUserId) == 1) { // 当前用户是聊天室成员
                 chatroom.setUserIds(null); // 信息隐藏
                 userChatroomList.add(chatroom);
             }
         }
         return userChatroomList;
+    }
+
+    /**
+     * 删除聊天室成员
+     * @param chatroomId 聊天室ID
+     * @param userId 成员ID
+     * @return 是否删除成功
+     */
+    @Override
+    public int removeMember(Long chatroomId, Long userId) {
+
+        return 0;
     }
 
     /**

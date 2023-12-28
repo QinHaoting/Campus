@@ -1,5 +1,6 @@
 package com.oddfar.campus.business.controller.web;
 
+import com.oddfar.campus.business.domain.entity.ChatroomEntity;
 import com.oddfar.campus.business.domain.entity.MessageEntity;
 import com.oddfar.campus.business.service.ChatroomService;
 import com.oddfar.campus.business.service.MessageService;
@@ -76,5 +77,16 @@ public class ChatroomController {
                     return R.error();
             }
         }
+    }
+
+    /**
+     * 查看用户所在所有聊天室
+     * @return 用户所在聊天室列表
+     */
+    @PreAuthorize("@ss.resourceAuth()")
+    @GetMapping(value = "/getChatroom", name = "获取用户所在的聊天室列表")
+    public R getChatroom() {
+        List<ChatroomEntity> chatroomList = chatroomService.getChatroomList(); // 当前用户所在聊天室列表
+        return R.ok().setData(chatroomList);
     }
 }

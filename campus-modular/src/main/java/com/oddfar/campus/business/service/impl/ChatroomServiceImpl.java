@@ -116,6 +116,19 @@ public class ChatroomServiceImpl extends ServiceImpl<ChatroomMapper, ChatroomEnt
         }
     }
 
+    @Override
+    public List<ChatroomEntity> getChatroomList() {
+        List<ChatroomEntity> chatroomEntityList = chatroomMapper.selectList(null);
+        List<ChatroomEntity> userChatroomList = new ArrayList<>();
+        for (ChatroomEntity chatroom: chatroomEntityList) {
+            if (isMember(chatroom.getChatroomId()) == 1) { // 当前用户是聊天室成员
+                chatroom.setUserIds(null); // 信息隐藏
+                userChatroomList.add(chatroom);
+            }
+        }
+        return userChatroomList;
+    }
+
     /**
      * 删除聊天室
      * @param chatroomId 聊天室ID

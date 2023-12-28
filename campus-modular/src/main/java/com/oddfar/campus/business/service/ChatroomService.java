@@ -50,4 +50,10 @@ public interface ChatroomService extends IService<ChatroomEntity> {
      * @return 是否为群主
      */
     int isOwner(Long chatroomId);
+
+    /**
+     * 获取当前用户所在的聊天室
+     * @return 用户所在聊天室
+     */
+    List<ChatroomEntity> getChatroomList();
 }
